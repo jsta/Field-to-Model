@@ -1,0 +1,80 @@
+FROM ubuntu:jammy AS base 
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update -y --fix-missing && apt-get install -y \
+  build-essential \
+  doxygen \
+  graphviz \
+  g++ \
+  gfortran \
+  gdb \
+  git \
+  vim \    
+  libboost-all-dev \
+  libjsoncpp-dev \
+  liblapacke \
+  liblapacke-dev \
+  libreadline-dev \
+  apt-utils \
+  curl \
+  libcurl4-openssl-dev \
+  emacs \
+  gedit \
+  git \
+  groff \
+  libblas-dev \
+  liblapacke-dev \
+  liblapack-dev \
+  libopenmpi-dev \
+  libssl-dev \
+  m4 \
+  make \
+  openssl \
+  pkg-config \
+  python3 \
+  python3-distutils \
+  python3-pip \
+  python-is-python3 \
+  rsync \
+  wget \
+  vim \
+  zlib1g-dev
+
+# Versions change and we cannot set environment variables from command output.
+ARG petsc_ver
+ARG trilinos_ver
+ARG https_proxy
+ARG http_proxy
+ARG amanzi_branch=master
+
+# Installation paths
+ENV AMANZI_PREFIX=/home/modex_user/install \
+  AMANZI_INSTALL_DIR=/home/modex_user/install/amanzi \
+  AMANZI_TPLS_DIR=/home/modex_user/install/tpls
+
+# TPL versions needed for LD_LIBRARY_PATH
+ENV AMANZI_PETSC_LIBS=$AMANZI_TPLS_DIR/petsc-${petsc_ver}/lib \
+  AMANZI_TRILINOS_LIBS=$AMANZI_TPLS_DIR/trilinos-${trilinos_ver}/lib \
+  AMANZI_SEACAS_LIBS=$AMANZI_TPLS_DIR/SEACAS/lib
+
+# Add an unprivileged user and group: modex_user, modex_user
+RUN groupadd -r modex_user \
+  && useradd -r -K UMASK=0022 -K HOME_MODE=0755 -m -g modex_user modex_user
+USER modex_user
+
+# Set the current working directory as the users home directory
+# (creates the directory if it doesn't exist)
+WORKDIR /home/modex_user
+
+RUN git clone https://github.com/amanzi/amanzi.git \
+  && cd amanzi/ \
+  && ./bootstrap.sh --prefix=${AMANZI_PREFIX} \
+      --parallel=4 --opt \
+      --amanzi-build-dir=/home/modex_user/amanzi_builddir/amanzi \
+      --tpl-build-dir=/home/modex_user/amanzi_builddir/tpls \
+      --tpl-download-dir=/home/modex_user/amanzi_builddir/tpls/Downloads \
+      --disable-build_amanzi --disable-build_user_guide \
+      --enable-shared --enable-structured --enable-silo \
+      --enable-alquimia --enable-pflotran --enable-crunchtope \
+      --enable-pf_clm \
+      --with-mpi=/usr \
+      --with-python=/usr/bin/python
