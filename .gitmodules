@@ -7,3 +7,6 @@
 [submodule "tools/elm-olmt"]
 	path = tools/elm-olmt
 	url = git@github.com:dmricciuto/elm-olmt
+[submodule "TEM"]
+	path = TEM
+	url = https://github.com/uaf-arctic-eco-modeling/dvm-dos-tem
