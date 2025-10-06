@@ -40,4 +40,4 @@ jobs:
       with:
         context: .
         file: ./Docker/Dockerfile-vis
-        tags: yuanfornl/vis-test:${{WORKSHOP_BRANCH}}-latest
+        tags: yuanfornl/vis-test:${{env.WORKSHOP_BRANCH_TAG}}-latest

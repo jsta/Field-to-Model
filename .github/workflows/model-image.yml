@@ -40,4 +40,4 @@ jobs:
       with:
         context: .
         file: ./Docker/Dockerfile-models
-        tags: yuanfornl/model-test:${{WORKSHOP_BRANCH}}-latest
+        tags: yuanfornl/model-test:${{env.WORKSHOP_BRANCH_TAG}}-latest
