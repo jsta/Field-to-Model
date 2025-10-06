@@ -1,4 +1,4 @@
-FROM ubuntu:jammy
+FROM ubuntu:noble
 
 RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime \
     && echo $CONTAINER_TIMEZONE > /etc/timezone \
@@ -11,6 +11,7 @@ RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime \
       automake \
       build-essential \
       bzip2 \
+      cmake \
       cpp \
       csh \
       curl \
@@ -34,7 +35,6 @@ RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime \
       libcurl4-openssl-dev \
       libevent-dev \
       libffi-dev \
-      libffi7 \
       libgmp3-dev \
       libgsl-dev \
       libhwloc-dev \
@@ -68,7 +68,6 @@ RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime \
       python-is-python3 \
       python3 \
       python3-dev \
-      python3-distutils \
       python3-openssl \
       python3-pip \
       rsync \
@@ -139,7 +138,6 @@ RUN groupadd -r modex_user \
   && useradd -r -K UMASK=0022 -K HOME_MODE=0755 -m -g modex_user modex_user
 USER modex_user
 
-
 # Set the current working directory as the users home directory
 # (creates the directory if it doesn't exist)
 WORKDIR /home/modex_user
@@ -151,7 +149,7 @@ WORKDIR /home/modex_user/amanzi
 ENV LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib
 RUN echo `which mpicc`
 RUN ./bootstrap.sh --prefix=${AMANZI_PREFIX} \
-      --parallel=16 --opt \
+      --parallel=4 --opt \
       --amanzi-build-dir=/home/modex_user/amanzi_builddir/amanzi \
       --tpl-build-dir=/home/modex_user/amanzi_builddir/tpls \
       --tpl-download-dir=/home/modex_user/amanzi_builddir/tpls/Downloads \
@@ -166,15 +164,22 @@ ENV HDF5_DIR=/home/modex_user/install/tpls \
     LD_LIBRARY_PATH=${AMANZI_TPLS_DIR}/lib:${AMANZI_PETSC_LIBS}:${AMANZI_TRILINOS_LIBS}:${AMANZI_SEACAS_LIBS}:/usr/local/lib64:/usr/local/lib:/usr/lib \
     PATH=/home/amanzi_user/amanzi/install/tools/bin:${PATH}
 
-RUN /usr/bin/pip3 install --no-cache-dir --upgrade pip \
-  && /usr/bin/pip3 install --no-cache-dir --no-binary=h5py h5py
+RUN mamba install -y -c conda-forge \
+        numpy \
+        Cython \
+        netcdf4 \
+        scipy \
+        mpi4py \
+        cftime \
+        configparser \
+        h5py \
+    && conda clean -afy
 
 RUN ./bootstrap.sh --prefix=${AMANZI_PREFIX} \
-      --parallel=16 --opt \
+      --parallel=4 --opt \
       --with-mpi=/usr/local \
       --amanzi-build-dir=/home/modex_user/amanzi_builddir/amanzi \
       --tpl-config-file=${AMANZI_TPLS_DIR}/share/cmake/amanzi-tpl-config.cmake \
       --disable-build_user_guide \ 
       --enable-ats_physics --disable-amanzi_physics --enable-reg_tests \
   && cd /home/modex_user/amanzi_builddir
-
