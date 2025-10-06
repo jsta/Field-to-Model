@@ -157,7 +157,12 @@ RUN ./bootstrap.sh --prefix=${AMANZI_PREFIX} \
       --enable-shared --enable-geochemistry \
       --disable-build_amanzi \
       --with-mpi=/usr/local \
-      --with-python=/opt/conda/bin/python
+      --with-python=/opt/conda/bin/python \
+  && rm -r /home/modex_user/amanzi_builddir \
+  && cd /home/modex_user/install \
+  && find . -type f -name '*.pdf' -exec rm {} + \
+  && find . -type f -name '*.png' -exec rm {} + \
+  && find . -type f -name '*.html' -exec rm {} +
 
 # set environment variables
 ENV HDF5_DIR=/home/modex_user/install/tpls \
