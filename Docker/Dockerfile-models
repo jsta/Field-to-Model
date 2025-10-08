@@ -62,8 +62,8 @@ ARG amanzi_branch=master
 # Installation paths
 ENV AMANZI_PREFIX=/home/modex_user/install \
   AMANZI_INSTALL_DIR=/home/modex_user/install/amanzi \
-  AMANZI_TPLS_DIR=/home/modex_user/install/tpls \
-  AMANZI_PETSC_LIBS=$AMANZI_TPLS_DIR/petsc-${petsc_ver}/lib \
+  AMANZI_TPLS_DIR=/home/modex_user/install/tpls
+ENV  AMANZI_PETSC_LIBS=$AMANZI_TPLS_DIR/petsc-${petsc_ver}/lib \
   AMANZI_TRILINOS_LIBS=$AMANZI_TPLS_DIR/trilinos-${trilinos_ver}/lib \
   AMANZI_SEACAS_LIBS=$AMANZI_TPLS_DIR/SEACAS/lib
 
@@ -242,8 +242,9 @@ USER modex_user
 # Installation paths
 ENV AMANZI_PREFIX=/home/modex_user/install \
   AMANZI_INSTALL_DIR=/home/modex_user/install/amanzi \
-  AMANZI_TPLS_DIR=/home/modex_user/install/tpls \
-  AMANZI_PETSC_LIBS=$AMANZI_TPLS_DIR/petsc-${petsc_ver}/lib \
+  AMANZI_TPLS_DIR=/home/modex_user/install/tpls
+
+ENV  AMANZI_PETSC_LIBS=$AMANZI_TPLS_DIR/petsc-${petsc_ver}/lib \
   AMANZI_TRILINOS_LIBS=$AMANZI_TPLS_DIR/trilinos-${trilinos_ver}/lib \
   AMANZI_SEACAS_LIBS=$AMANZI_TPLS_DIR/SEACAS/lib
   
