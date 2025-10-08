@@ -72,8 +72,8 @@ jobs:
           echo "WORKSHOP_BRANCH_TAG=$(echo ${{env.WORKSHOP_BRANCH}} | sed -e 's/\//--/g')" >> $GITHUB_ENV
       - name: Pull images (remove with artifacts??)
         run: |
-          docker pull yuanfornl/ngee-modex-models:${{env.WORKSHOP_BRANCH_TAG}}-${{env.ARCH}}-latest
-          docker pull yuanfornl/ngee-modex-models:${{env.WORKSHOP_BRANCH_TAG}}-${{env.ARCH}}-latest
+          docker pull yuanfornl/ngee-modex-models:${{env.WORKSHOP_BRANCH_TAG}}-amd64-latest
+          docker pull yuanfornl/ngee-modex-models:${{env.WORKSHOP_BRANCH_TAG}}-arm64-latest
       - name: Edit manifest
         run: |
           docker manifest create yuanfornl/ngee-modex-models:${{env.WORKSHOP_BRANCH_TAG}}-latest \
