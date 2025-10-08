@@ -1,16 +1,19 @@
 name: build visualization image
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "**" ]
     paths:
       - "**/Dockerfile*"
       - ".gitmodules"
+      - ".github/workflows/vis-image.yml"
   pull_request:
     branches: [ "**" ]
     paths:
       - "**/Dockerfile*"
       - ".gitmodules"
+      - ".github/workflows/vis-image.yml"
 
 jobs:
   build:

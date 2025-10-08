@@ -1,16 +1,19 @@
 name: build model images
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "**" ]
     paths:
       - "**/Dockerfile*"
       - ".gitmodules"
+      - ".github/workflows/model-image.yml"
   pull_request:
     branches: [ "**" ]
     paths:
       - "**/Dockerfile*"
       - ".gitmodules"
+      - ".github/workflows/model-image.yml"
 
 jobs:
   build:
