@@ -8,12 +8,6 @@ on:
       - "**/Dockerfile*"
       - ".gitmodules"
       - ".github/workflows/model-image.yml"
-  pull_request:
-    branches: [ "**" ]
-    paths:
-      - "**/Dockerfile*"
-      - ".gitmodules"
-      - ".github/workflows/model-image.yml"
 
 jobs:
   build:
@@ -54,6 +48,7 @@ jobs:
         context: .
         file: ./Docker/Dockerfile-models
         tags: yuanfornl/ngee-arctic-modex25:models-${{env.WORKSHOP_BRANCH_TAG}}-${{env.ARCH}}-latest
+        push: true
 
   fix-manifest:
     runs-on: ubuntu-latest
