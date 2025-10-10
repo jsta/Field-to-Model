@@ -1,4 +1,4 @@
-  name: build visualization image
+name: build visualization image
 
 on:
   workflow_dispatch:
