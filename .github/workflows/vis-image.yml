@@ -5,13 +5,7 @@ on:
   push:
     branches: [ "**" ]
     paths:
-      - "**/Dockerfile*"
-      - ".gitmodules"
-      - ".github/workflows/vis-image.yml"
-  pull_request:
-    branches: [ "**" ]
-    paths:
-      - "**/Dockerfile*"
+      - "**/Dockerfile-vis"
       - ".gitmodules"
       - ".github/workflows/vis-image.yml"
 
