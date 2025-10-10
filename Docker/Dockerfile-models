@@ -1,4 +1,5 @@
 FROM ubuntu:noble AS base
+ARG TARGETARCH
 
 RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime \
     && echo $CONTAINER_TIMEZONE > /etc/timezone \
