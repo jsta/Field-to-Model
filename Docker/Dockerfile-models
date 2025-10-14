@@ -1,4 +1,4 @@
-FROM ubuntu:noble AS base
+FROM ubuntu:noble AS ats
 ARG TARGETARCH
 
 RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime \
@@ -61,9 +61,9 @@ ARG http_proxy
 ARG amanzi_branch=master
 
 # Installation paths
-ENV AMANZI_PREFIX=/home/modex_user/install \
-  AMANZI_INSTALL_DIR=/home/modex_user/install/amanzi \
-  AMANZI_TPLS_DIR=/home/modex_user/install/tpls
+ENV AMANZI_PREFIX=/home/modex_user/install_ats \
+  AMANZI_INSTALL_DIR=/home/modex_user/install_ats/amanzi \
+  AMANZI_TPLS_DIR=/home/modex_user/install_ats/tpls
 ENV  AMANZI_PETSC_LIBS=$AMANZI_TPLS_DIR/petsc-${petsc_ver}/lib \
   AMANZI_TRILINOS_LIBS=$AMANZI_TPLS_DIR/trilinos-${trilinos_ver}/lib \
   AMANZI_SEACAS_LIBS=$AMANZI_TPLS_DIR/SEACAS/lib
@@ -236,14 +236,15 @@ RUN export mpi_version_major=`echo ${mpi_version} | cut -c1-3` && echo $mpi_vers
   && rm openmpi-${mpi_version}.tar.gz
 
 # Add an unprivileged user and group: modex_user, modex_user
-RUN groupadd -r modex_user \
-  && useradd -r -K UMASK=0022 -K HOME_MODE=0755 -m -g modex_user modex_user
+RUN groupadd -r modex_user -g 1000 \
+  && useradd -u 1000 -r -K UMASK=0022 -K HOME_MODE=0755 -m -g modex_user modex_user \
+  && chown -R 1000:1000 /home/modex_user
 USER modex_user
 
 # Installation paths
-ENV AMANZI_PREFIX=/home/modex_user/install \
-  AMANZI_INSTALL_DIR=/home/modex_user/install/amanzi \
-  AMANZI_TPLS_DIR=/home/modex_user/install/tpls
+ENV AMANZI_PREFIX=/home/modex_user/install_ats \
+  AMANZI_INSTALL_DIR=/home/modex_user/install_ats/amanzi \
+  AMANZI_TPLS_DIR=/home/modex_user/install_ats/tpls
 
 ENV  AMANZI_PETSC_LIBS=$AMANZI_TPLS_DIR/petsc-${petsc_ver}/lib \
   AMANZI_TRILINOS_LIBS=$AMANZI_TPLS_DIR/trilinos-${trilinos_ver}/lib \
@@ -273,7 +274,7 @@ ENV SITE_SPECIFIC_LIBS="-I/usr/lib"
 # image, the .git directory is not there, so it cannot be determined.
 # We can pass it in as a build argument when building the image.
 # If not passed in, it defaults to "unset"
-RUN make clean && GIT_SHA=$TEM_VERSION make
+RUN make clean && GIT_SHA=$TEM_VERSION make -j4
 
 # Copy a bunch of other stuff needed to run TEM into the image
 COPY --chown=modex_user:modex_user TEM/config/ /home/modex_user/TEM/config/
@@ -298,7 +299,8 @@ RUN echo "Trying to run pyddt..." \
 # Cleanup...all the relevant bits should have been copied during the install
 # The full source can be made available by mounting a volume at container 
 # runtime.
-RUN rm -rf /home/modex_user/TEM
+# RUN rm -rf /home/modex_user/TEM
+# RPF - TEM repo is pretty small, so no real need to delete.
 
 # Make dvmdostem and pyddt available in the PATH
 ENV PATH="/home/modex_user/install_dvmdostem/bin:$PATH"
@@ -308,7 +310,7 @@ ENV PATH="/home/modex_user/.local/bin:$PATH"
 #########################################
 
 WORKDIR /home/modex_user/
-COPY --from=base /home/modex_user/install /home/modex_user/install
+COPY --from=ats /home/modex_user/install_ats /home/modex_user/install_ats
 COPY .cime /home/modex_user/.cime
 
 
