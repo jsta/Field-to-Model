@@ -54,10 +54,8 @@ RUN export mpi_version_major=`echo ${mpi_version} | cut -c1-3` && echo $mpi_vers
   && rm openmpi-${mpi_version}.tar.gz
 
 # Versions change and we cannot set environment variables from command output.
-ARG petsc_ver
-ARG trilinos_ver
-ARG https_proxy
-ARG http_proxy
+ARG petsc_ver=
+ARG trilinos_ver=
 ARG amanzi_branch=master
 
 # Installation paths
@@ -91,15 +89,15 @@ RUN ./bootstrap.sh --prefix=${AMANZI_PREFIX} \
       --with-mpi=/usr/local \
       --with-python=/opt/conda/bin/python \
   && rm -r /home/modex_user/amanzi_builddir \
-  && cd /home/modex_user/install \
+  && cd /home/modex_user/install_ats \
   && find . -type f -name '*.pdf' -exec rm {} + \
   && find . -type f -name '*.png' -exec rm {} + \
   && find . -type f -name '*.html' -exec rm {} +
 
 # set environment variables
-ENV HDF5_DIR=/home/modex_user/install/tpls \
+ENV HDF5_DIR=/home/modex_user/install_ats/tpls \
     LD_LIBRARY_PATH=${AMANZI_TPLS_DIR}/lib:${AMANZI_PETSC_LIBS}:${AMANZI_TRILINOS_LIBS}:${AMANZI_SEACAS_LIBS}:/usr/local/lib64:/usr/local/lib:/usr/lib \
-    PATH=/home/amanzi_user/amanzi/install/tools/bin:${PATH}
+    PATH=/home/amanzi_user/amanzi/install_ats/tools/bin:${PATH}
 
 RUN mamba install -y -c conda-forge \
         h5py \
@@ -236,9 +234,9 @@ RUN export mpi_version_major=`echo ${mpi_version} | cut -c1-3` && echo $mpi_vers
   && rm openmpi-${mpi_version}.tar.gz
 
 # Add an unprivileged user and group: modex_user, modex_user
-RUN groupadd -r modex_user -g 1000 \
-  && useradd -u 1000 -r -K UMASK=0022 -K HOME_MODE=0755 -m -g modex_user modex_user \
-  && chown -R 1000:1000 /home/modex_user
+RUN groupadd -r modex_user -g 1001 \
+  && useradd -u 1001 -r -K UMASK=0022 -K HOME_MODE=0755 -m -g modex_user modex_user \
+  && chown -R 1001:1001 /home/modex_user
 USER modex_user
 
 # Installation paths
@@ -250,7 +248,7 @@ ENV  AMANZI_PETSC_LIBS=$AMANZI_TPLS_DIR/petsc-${petsc_ver}/lib \
   AMANZI_TRILINOS_LIBS=$AMANZI_TPLS_DIR/trilinos-${trilinos_ver}/lib \
   AMANZI_SEACAS_LIBS=$AMANZI_TPLS_DIR/SEACAS/lib
   
-ENV HDF5_DIR=/home/modex_user/install/tpls \
+ENV HDF5_DIR=/home/modex_user/install_ats/tpls \
     LD_LIBRARY_PATH=${AMANZI_TPLS_DIR}/lib:${AMANZI_PETSC_LIBS}:${AMANZI_TRILINOS_LIBS}:${AMANZI_SEACAS_LIBS}:/usr/local/lib64:/usr/local/lib:/usr/lib 
 
 ################ TEM ####################
@@ -310,7 +308,10 @@ ENV PATH="/home/modex_user/.local/bin:$PATH"
 #########################################
 
 WORKDIR /home/modex_user/
-COPY --from=ats /home/modex_user/install_ats /home/modex_user/install_ats
-COPY .cime /home/modex_user/.cime
+COPY --from=ats --chown=modex_user:modex_user /home/modex_user/install_ats /home/modex_user/install_ats
+COPY --chown=modex_user:modex_user .cime /home/modex_user/.cime
+ENV PATH="/home/modex_user/install_ats/bin:$PATH"
 
-
+# Need to fix a lot of permissions:
+RUN mkdir ~/workshop_data  \
+  && chown -R 1001:1001 /home/modex_user
