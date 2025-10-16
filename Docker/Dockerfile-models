@@ -258,9 +258,7 @@ USER modex_user
 WORKDIR /home/modex_user/TEM
 
 # Copy the source into the image
-COPY --chown=modex_user:modex_user TEM/src/ /home/modex_user/TEM/src/
-COPY --chown=modex_user:modex_user TEM/Makefile /home/modex_user/TEM/Makefile
-COPY --chown=modex_user:modex_user TEM/include/ /home/modex_user/TEM/include/
+COPY --chown=modex_user:modex_user TEM/ /home/modex_user/TEM/
 
 # Set some environment variables used during the compile
 ENV SITE_SPECIFIC_INCLUDES="-I/usr/include/jsoncpp"
@@ -272,33 +270,20 @@ ENV SITE_SPECIFIC_LIBS="-I/usr/lib"
 # image, the .git directory is not there, so it cannot be determined.
 # We can pass it in as a build argument when building the image.
 # If not passed in, it defaults to "unset"
-RUN make clean && GIT_SHA=$TEM_VERSION make -j4
-
-# Copy a bunch of other stuff needed to run TEM into the image
-COPY --chown=modex_user:modex_user TEM/config/ /home/modex_user/TEM/config/
-COPY --chown=modex_user:modex_user TEM/parameters/ /home/modex_user/TEM/parameters/
-COPY --chown=modex_user:modex_user TEM/demo-data/ /home/modex_user/TEM/demo-data/
-COPY --chown=modex_user:modex_user TEM/pyddt/ /home/modex_user/TEM/pyddt
-COPY --chown=modex_user:modex_user TEM/bootstrap_install.sh /home/modex_user/TEM/bootstrap_install.sh
+RUN make clean && GIT_SHA=$TEM_VERSION make -j4 \
 
 # Run the installer script to put dvmdostem and pyddt in a location
 # that is not wiped out if the user mounts a volume at /home/modex_user/TEM
 # when launching the container.
 # since dvmdostem doesn't follow a standard autotools or cmake install, I put
 # it in its own directory to avoid messing with the amanzi install
-RUN ./bootstrap_install.sh --prefix="/home/modex_user/install_dvmdostem"
-RUN echo "Trying to run installed dvmdostem binary..." \
+  && ./bootstrap_install.sh --prefix="/home/modex_user/install_dvmdostem" \
+  && echo "Trying to run installed dvmdostem binary..." \
   && /home/modex_user/install_dvmdostem/bin/dvmdostem --help
 
-RUN pip install -e /home/modex_user/install_dvmdostem/pyddt
-RUN echo "Trying to run pyddt..." \
+RUN pip install -e /home/modex_user/install_dvmdostem/pyddt \
+  && echo "Trying to run pyddt..." \
   && python -c "import pyddt; print(pyddt)" 
-
-# Cleanup...all the relevant bits should have been copied during the install
-# The full source can be made available by mounting a volume at container 
-# runtime.
-# RUN rm -rf /home/modex_user/TEM
-# RPF - TEM repo is pretty small, so no real need to delete.
 
 # Make dvmdostem and pyddt available in the PATH
 ENV PATH="/home/modex_user/install_dvmdostem/bin:$PATH"
@@ -312,6 +297,8 @@ COPY --from=ats --chown=modex_user:modex_user /home/modex_user/install_ats /home
 COPY --chown=modex_user:modex_user .cime /home/modex_user/.cime
 ENV PATH="/home/modex_user/install_ats/bin:$PATH"
 
+
 # Need to fix a lot of permissions:
 RUN mkdir ~/workshop_data  \
+  && mkdir ~/runs ~/scripts \
   && chown -R 1001:1001 /home/modex_user
