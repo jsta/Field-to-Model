@@ -106,3 +106,18 @@ dvmdostem -p 25 -e 25 -s 15 -t 115 -n 85
 # outputs are in the output folder!
 ls output/
 ```
+
+## E3SM Demo Runs
+
+1) Create volumes:
+```shell
+docker volume create inputdata
+docker volume create workshop_output
+```
+
+2) Get input data
+```shell
+docker run -v inputdata:/home/modex_user/inputdata -v $(pwd)/tools:/home/modex_user/tools /home/modex_user/tools/scripts/get_inputdata.sh
+```
+
+
