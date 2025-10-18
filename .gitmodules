@@ -4,9 +4,7 @@
 [submodule "tools/dapper"]
 	path = tools/dapper
 	url = git@github.com:ngee-arctic/dapper
-[submodule "tools/elm-olmt"]
-	path = tools/elm-olmt
-	url = git@github.com:dmricciuto/elm-olmt
-[submodule "TEM"]
-	path = TEM
-	url = https://github.com/uaf-arctic-eco-modeling/dvm-dos-tem
+[submodule "tools/olmt"]
+	path = tools/olmt
+	url = git@github.com:rfiorella/olmt
+	branch = rfiorella/era5

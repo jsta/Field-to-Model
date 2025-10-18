@@ -1,4 +1,4 @@
-FROM ubuntu:noble AS base
+FROM ubuntu:noble AS ats
 ARG TARGETARCH
 
 RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime \
@@ -54,16 +54,14 @@ RUN export mpi_version_major=`echo ${mpi_version} | cut -c1-3` && echo $mpi_vers
   && rm openmpi-${mpi_version}.tar.gz
 
 # Versions change and we cannot set environment variables from command output.
-ARG petsc_ver
-ARG trilinos_ver
-ARG https_proxy
-ARG http_proxy
+ARG petsc_ver=
+ARG trilinos_ver=
 ARG amanzi_branch=master
 
 # Installation paths
-ENV AMANZI_PREFIX=/home/modex_user/install \
-  AMANZI_INSTALL_DIR=/home/modex_user/install/amanzi \
-  AMANZI_TPLS_DIR=/home/modex_user/install/tpls
+ENV AMANZI_PREFIX=/home/modex_user/install_ats \
+  AMANZI_INSTALL_DIR=/home/modex_user/install_ats/amanzi \
+  AMANZI_TPLS_DIR=/home/modex_user/install_ats/tpls
 ENV  AMANZI_PETSC_LIBS=$AMANZI_TPLS_DIR/petsc-${petsc_ver}/lib \
   AMANZI_TRILINOS_LIBS=$AMANZI_TPLS_DIR/trilinos-${trilinos_ver}/lib \
   AMANZI_SEACAS_LIBS=$AMANZI_TPLS_DIR/SEACAS/lib
@@ -73,13 +71,12 @@ ENV  AMANZI_PETSC_LIBS=$AMANZI_TPLS_DIR/petsc-${petsc_ver}/lib \
 WORKDIR /home/modex_user
 ADD tools /home/modex_user/tools
 
-RUN git clone https://github.com/amanzi/amanzi.git \
+RUN git clone -b amanzi-1.6 https://github.com/amanzi/amanzi.git \
   && cd amanzi/ \
   && git submodule update --init --recursive
 
 WORKDIR /home/modex_user/amanzi
 ENV LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib
-RUN echo `which mpicc`
 RUN ./bootstrap.sh --prefix=${AMANZI_PREFIX} \
       --parallel=4 --opt \
       --amanzi-build-dir=/home/modex_user/amanzi_builddir/amanzi \
@@ -91,15 +88,15 @@ RUN ./bootstrap.sh --prefix=${AMANZI_PREFIX} \
       --with-mpi=/usr/local \
       --with-python=/opt/conda/bin/python \
   && rm -r /home/modex_user/amanzi_builddir \
-  && cd /home/modex_user/install \
+  && cd /home/modex_user/install_ats \
   && find . -type f -name '*.pdf' -exec rm {} + \
   && find . -type f -name '*.png' -exec rm {} + \
   && find . -type f -name '*.html' -exec rm {} +
 
 # set environment variables
-ENV HDF5_DIR=/home/modex_user/install/tpls \
+ENV HDF5_DIR=/home/modex_user/install_ats/tpls \
     LD_LIBRARY_PATH=${AMANZI_TPLS_DIR}/lib:${AMANZI_PETSC_LIBS}:${AMANZI_TRILINOS_LIBS}:${AMANZI_SEACAS_LIBS}:/usr/local/lib64:/usr/local/lib:/usr/lib \
-    PATH=/home/amanzi_user/amanzi/install/tools/bin:${PATH}
+    PATH=/home/amanzi_user/amanzi/install_ats/tools/bin:${PATH}
 
 RUN mamba install -y -c conda-forge \
         h5py \
@@ -115,7 +112,6 @@ RUN ./bootstrap.sh --prefix=${AMANZI_PREFIX} \
       --disable-structured --enable-geochemistry \
   && cd /home/modex_user/amanzi_builddir \
   && ctest
-
 
 FROM ubuntu:noble AS modex-ats-elm-tem
 
@@ -134,18 +130,14 @@ RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime \
       cpp \
       csh \
       curl \
-      doxygen \
-      emacs \
       expat \
       flex \
       ftp \
       g++ \
       gcc \
-      gedit \
       git \
       gfortran \
       groff \
-      graphviz \
       gsl-bin \
       jq \
       libblas-dev \
@@ -176,19 +168,12 @@ RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime \
       libxml2-dev \
       libxml2-utils \
       libzstd-dev \
-      llvm \
       locales \
       m4 \
       make \
       nco \
-      ncview \
       openssl \
       pkg-config \
-      python-is-python3 \
-      python3 \
-      python3-dev \
-      python3-openssl \
-      python3-pip \
       rsync \
       subversion \
       tk-dev \
@@ -236,79 +221,70 @@ RUN export mpi_version_major=`echo ${mpi_version} | cut -c1-3` && echo $mpi_vers
   && rm openmpi-${mpi_version}.tar.gz
 
 # Add an unprivileged user and group: modex_user, modex_user
-RUN groupadd -r modex_user \
-  && useradd -r -K UMASK=0022 -K HOME_MODE=0755 -m -g modex_user modex_user
+RUN groupadd -r modex_user -g 1001 \
+  && useradd -u 1001 -r -K UMASK=0022 -K HOME_MODE=0755 -m -g modex_user modex_user \
+  && chown -R 1001:1001 /home/modex_user
 USER modex_user
 
 # Installation paths
-ENV AMANZI_PREFIX=/home/modex_user/install \
-  AMANZI_INSTALL_DIR=/home/modex_user/install/amanzi \
-  AMANZI_TPLS_DIR=/home/modex_user/install/tpls
+ENV AMANZI_PREFIX=/home/modex_user/install_ats \
+  AMANZI_INSTALL_DIR=/home/modex_user/install_ats/amanzi \
+  AMANZI_TPLS_DIR=/home/modex_user/install_ats/tpls
 
 ENV  AMANZI_PETSC_LIBS=$AMANZI_TPLS_DIR/petsc-${petsc_ver}/lib \
   AMANZI_TRILINOS_LIBS=$AMANZI_TPLS_DIR/trilinos-${trilinos_ver}/lib \
   AMANZI_SEACAS_LIBS=$AMANZI_TPLS_DIR/SEACAS/lib
   
-ENV HDF5_DIR=/home/modex_user/install/tpls \
+ENV HDF5_DIR=/home/modex_user/install_ats/tpls \
     LD_LIBRARY_PATH=${AMANZI_TPLS_DIR}/lib:${AMANZI_PETSC_LIBS}:${AMANZI_TRILINOS_LIBS}:${AMANZI_SEACAS_LIBS}:/usr/local/lib64:/usr/local/lib:/usr/lib 
 
 ################ TEM ####################
 
-ARG TEM_VERSION="unset"      # default if not passed as --build-arg TEM_VERSION=xxx
+# Override by passing --build-arg TEM_VERSION=<git_sha> when building the image
+ARG TEM_VERSION="77038e0c"
 USER modex_user
-WORKDIR /home/modex_user/TEM
-
-# Copy the source into the image
-COPY --chown=modex_user:modex_user TEM/src/ /home/modex_user/TEM/src/
-COPY --chown=modex_user:modex_user TEM/Makefile /home/modex_user/TEM/Makefile
-COPY --chown=modex_user:modex_user TEM/include/ /home/modex_user/TEM/include/
+WORKDIR /home/modex_user
 
 # Set some environment variables used during the compile
 ENV SITE_SPECIFIC_INCLUDES="-I/usr/include/jsoncpp"
-ENV SITE_SPECIFIC_LIBS="-I/usr/lib"
+ENV SITE_SPECIFIC_LIBS="-L/usr/lib"
 
-# Compile the C++ part of dvmdostem
-# passing in the git version. Typically this is looked up automatically
-# during the make process, but since we are copying the source into the
-# image, the .git directory is not there, so it cannot be determined.
-# We can pass it in as a build argument when building the image.
-# If not passed in, it defaults to "unset"
-RUN make clean && GIT_SHA=$TEM_VERSION make
-
-# Copy a bunch of other stuff needed to run TEM into the image
-COPY --chown=modex_user:modex_user TEM/config/ /home/modex_user/TEM/config/
-COPY --chown=modex_user:modex_user TEM/parameters/ /home/modex_user/TEM/parameters/
-COPY --chown=modex_user:modex_user TEM/demo-data/ /home/modex_user/TEM/demo-data/
-COPY --chown=modex_user:modex_user TEM/pyddt/ /home/modex_user/TEM/pyddt
-COPY --chown=modex_user:modex_user TEM/bootstrap_install.sh /home/modex_user/TEM/bootstrap_install.sh
-
+# Clone the dvmdostem repository and compile it. By cloning here, we have
+# access to the .git directory, which allows us to determine the git version.
+# Here we use git describe to get a human readable version string. Alternatively,
+# we could just use the commit hash via the TEM_VERSION build argument.
+RUN git clone https://github.com/uaf-arctic-eco-modeling/dvm-dos-tem \
+  && cd dvm-dos-tem/ && git checkout $TEM_VERSION \
+  && make clean && export GIT_SHA=$(git describe) && make -j4 \
 # Run the installer script to put dvmdostem and pyddt in a location
 # that is not wiped out if the user mounts a volume at /home/modex_user/TEM
 # when launching the container.
 # since dvmdostem doesn't follow a standard autotools or cmake install, I put
 # it in its own directory to avoid messing with the amanzi install
-RUN ./bootstrap_install.sh --prefix="/home/modex_user/install_dvmdostem"
-RUN echo "Trying to run installed dvmdostem binary..." \
-  && /home/modex_user/install_dvmdostem/bin/dvmdostem --help
+  && ./bootstrap_install.sh --prefix="/home/modex_user/install_dvmdostem" \
+  && echo "Trying to run installed dvmdostem binary..." \
+  && /home/modex_user/install_dvmdostem/bin/dvmdostem --help \
+  && rm -rf /home/modex_user/dvm-dos-tem
 
-RUN pip install -e /home/modex_user/install_dvmdostem/pyddt
-RUN echo "Trying to run pyddt..." \
+RUN pip install -e /home/modex_user/install_dvmdostem/pyddt \
+  && echo "Trying to run pyddt..." \
   && python -c "import pyddt; print(pyddt)" 
 
-# Cleanup...all the relevant bits should have been copied during the install
-# The full source can be made available by mounting a volume at container 
-# runtime.
-RUN rm -rf /home/modex_user/TEM
-
 # Make dvmdostem and pyddt available in the PATH
-ENV PATH="/home/modex_user/install_dvmdostem/bin:$PATH"
-ENV PATH="/home/modex_user/.local/bin:$PATH"
+ENV PATH="/home/modex_user/.local/bin:/home/modex_user/install_dvmdostem/bin:$PATH"
 
 # End of TEM section
 #########################################
 
 WORKDIR /home/modex_user/
-COPY --from=base /home/modex_user/install /home/modex_user/install
-COPY .cime /home/modex_user/.cime
+COPY --from=ats --chown=modex_user:modex_user /home/modex_user/install_ats /home/modex_user/install_ats
+COPY --chown=modex_user:modex_user .cime /home/modex_user/.cime
+ENV PATH="/home/modex_user/install_ats/bin:$PATH"
 
-
+# Need to fix a lot of permissions:
+RUN mkdir ~/inputdata  \
+  && mkdir -p ~/output/elm ~/output/tem \
+  && mkdir -p ~/tools ~/examples/elm ~/examples/ats ~/examples/tem \
+  && chown -R 1001:1001 /home/modex_user \
+  && git config --global user.name "ModEx User" \
+  && git config --global user.email "ngeearctic@dev.null"
