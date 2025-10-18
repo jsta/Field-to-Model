@@ -240,26 +240,22 @@ ENV HDF5_DIR=/home/modex_user/install_ats/tpls \
 
 ################ TEM ####################
 
-ARG TEM_VERSION="77038e0c"      # default if not passed as --build-arg TEM_VERSION=xxx
+# Override by passing --build-arg TEM_VERSION=<git_sha> when building the image
+ARG TEM_VERSION="77038e0c"
 USER modex_user
 WORKDIR /home/modex_user
-
-# Copy the source into the image
-#COPY --chown=modex_user:modex_user TEM/ /home/modex_user/TEM/
 
 # Set some environment variables used during the compile
 ENV SITE_SPECIFIC_INCLUDES="-I/usr/include/jsoncpp"
 ENV SITE_SPECIFIC_LIBS="-L/usr/lib"
 
-# Compile the C++ part of dvmdostem
-# passing in the git version. Typically this is looked up automatically
-# during the make process, but since we are copying the source into the
-# image, the .git directory is not there, so it cannot be determined.
-# We can pass it in as a build argument when building the image.
-# If not passed in, it defaults to "unset"
+# Clone the dvmdostem repository and compile it. By cloning here, we have
+# access to the .git directory, which allows us to determine the git version.
+# Here we use git describe to get a human readable version string. Alternatively,
+# we could just use the commit hash via the TEM_VERSION build argument.
 RUN git clone https://github.com/uaf-arctic-eco-modeling/dvm-dos-tem \
-  && cd dvm-dos-tem/ && git checkout 77038e0ce26ae9f9e6541371c3beb0755bceb128 \
-  && make clean && GIT_SHA=$TEM_VERSION make -j4 \
+  && cd dvm-dos-tem/ && git checkout $TEM_VERSION \
+  && make clean && export GIT_SHA=$(git describe) && make -j4 \
 # Run the installer script to put dvmdostem and pyddt in a location
 # that is not wiped out if the user mounts a volume at /home/modex_user/TEM
 # when launching the container.
