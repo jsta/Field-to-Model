@@ -1,5 +1,5 @@
-TEM Warming Experiment (TEM Introduction and hands-on exercises)
-================================================
+TEM Warming Experiment (and TEM Introduction)
+=================================================================
 
 What are we trying to model?
 -------------------------------------------------------------
@@ -34,6 +34,65 @@ Setup
    Waiting on Tobey to finalize input data prep. For now, just use the 
    demo data that is shipped with the TEM install...in the modex model container
    you can find it at :code:`/home/modex_user/install_dvmdostem/demo-data`.
+
+
+Copy the input data that you'd like to use to the input data directory:
+
+.. tip:: 
+   
+   Once we have inputs prepared for the workshop you can skip this step and
+   just browse the input data folder to find data you want to use.
+
+.. code:: shell
+
+   cp -r install_dvmdostem/demo-data/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10 inputdata/
+
+Next, to make the experiment and analyis easier, we will glue together the 
+historic and projected (scenario) climate data into a single continuous dataset.
+This will allow us to run the model in a single stage from 1901-2100 rather than
+having to do a transient run followed by a scenario run. Use the helper script
+in the :code:`model_examples/TEM` directory to do this:
+
+.. code:: shell
+
+   ./model_examples/TEM/glue_transient_scenario.py inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10
+      
+Now if you look in the new directory, you should see a new file called
+:code:`transient-historic-climate.nc` which contains the glued together climate.
+
+Now we are going to make copy of this dataset to create our "treatment" or
+"warming" dataset. We will then modify this copy to increase the air temperatures
+by 2.6 degrees Celsius during the summer months (June, July, August, September)
+for the year 2019.
+
+.. code:: shell
+
+   cp -r inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10 \
+     inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019
+
+Now we will run the helper script to modify the air temperatures in the new
+dataset:
+
+.. code:: shell
+
+   ./model_examples/TEM/modify_air_temperature.py \
+     --data-dir inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019 \
+     --deviation 2.6 \
+     --sign + \
+     --year 2019 \
+     --months 6 7 8 9   
+
+Now we have two datasets:
+
+  * :code:`inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10` - the control dataset
+  * :code:`inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019` - the warming treatment dataset
+
+.. seealso::
+
+   would be nice to show some viz of this...need to use the other container??
+
+
+
 
 .. note:: from 10/14 brainstorming session
 
