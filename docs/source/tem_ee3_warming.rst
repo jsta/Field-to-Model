@@ -23,6 +23,11 @@ Lewin, K. F., McMahon, A. M., Ely, K. S., Serbin, S. P., & Rogers, A. (2017). A 
 Ely, Kim, Anderson, Jeremiah, Serbin, Shawn, & Rogers, Alistair (2024). Vegetation Warming Experiment: Thaw depth and dGPS locations, Utqiagvik, Alaska, 2019. https://doi.org/10.5440/1887568
 
 
+.. note:: TODO
+
+   Add some links to the text above into the relevant sections of the TEM 
+   User Guide. For example linking to the description of Community Types, PFTs, 
+   etc.
 
 
 
@@ -34,6 +39,35 @@ Setup
    Waiting on Tobey to finalize input data prep. For now, just use the 
    demo data that is shipped with the TEM install...in the modex model container
    you can find it at :code:`/home/modex_user/install_dvmdostem/demo-data`.
+
+.. note:: Prerequisites
+
+   Assumes you have done the following container setup after downloading
+   the container image from the cloud:
+
+   .. code:: shell
+
+      docker volume create inputdata
+      docker volume create output
+      docker run -it --rm \
+         -p 9000:9000 \ 
+         -v $(pwd)/model_examples:/home/modex_user/model_examples \ 
+         -v inputdata:/home/modex_user/inputdata \
+         -v output:/home/modex_user/output \
+         model-container:latest
+
+      # Alternate ways, mount might work better if you plan to edit files on the
+      # host side and have them show up in the container right away....
+      # -v $(pwd)/model_examples:/home/modex_user/model_examples \
+      # --mount type=bind,src=$(pwd)/model_examples,dst=/home/modex_user/model_examples \
+
+
+   Which should give you a shell prompt inside the container with two
+   volumes mounted for input data and workshop runs.
+
+   .. code:: shell
+
+      modex_user@5cf5a55dff62:~$
 
 
 Copy the input data that you'd like to use to the input data directory:
@@ -47,7 +81,7 @@ Copy the input data that you'd like to use to the input data directory:
 
    cp -r install_dvmdostem/demo-data/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10 inputdata/
 
-Next, to make the experiment and analyis easier, we will glue together the 
+Next, to make the experiment and analysis easier, we will glue together the 
 historic and projected (scenario) climate data into a single continuous dataset.
 This will allow us to run the model in a single stage from 1901-2100 rather than
 having to do a transient run followed by a scenario run. Use the helper script
@@ -76,22 +110,135 @@ dataset:
 .. code:: shell
 
    ./model_examples/TEM/modify_air_temperature.py \
-     --data-dir inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019 \
-     --deviation 2.6 \
-     --sign + \
-     --year 2019 \
-     --months 6 7 8 9   
+   --input-file inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019/transient-scenario-climate.nc \
+   --years 2019 \
+   --months 6 7 8 9 \
+   --years 2019 \
+   --deviation 2.6
+
+   
+As you will see in the statements that are printed out from this scritp it will 
+actually create an new file alongside the existing one. Here we throw out the original file and rename
+the modified version to clean things up.
+
+.. code:: shell
+
+   mv inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019/modified_transient-scenario-climate.nc \
+      inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019/transient-scenario-climate.nc
+
+.. note:: 
+
+   The modification script uses :code:`xarray` under the hood to manipulate
+   the netCDF data. It creates a boolean mask for the time dimension based
+   on the specified years and months, and then applies the temperature deviation
+   only to those selected time points.
+
+.. note:: TODO
+
+   Do we want to clean up the historic and scenario files in each input now that
+   we've got the glue together version? Probably not necessary but could help
+   avoid confusion....
+
+.. note:: 
+
+   The modification script can take additional arguments to modify multiple
+   years and different months as needed. See the help message for details:
 
 Now we have two datasets:
 
-  * :code:`inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10` - the control dataset
-  * :code:`inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019` - the warming treatment dataset
+  * the control dataset: :code:`inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10`
+  * the warming treatment dataset: :code:`inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019`
 
-.. seealso::
+.. note:: TODO
 
    would be nice to show some viz of this...need to use the other container??
 
+Now that we have the datasets set up, we can create two run folders using the 
+:code:`pyddt-swd` utility helper tool. For this we will work in the 
+:code:`~/workshop_runs/tem_ee3_warming` directory.
 
+
+.. code:: shell
+
+   mkdir -p ~/output/tem/tem_ee3_warming
+   cd ~/output/tem/tem_ee3_warming
+
+   pyddt-swd \
+      --input-data ~/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10 \
+      control
+
+   pyddt-swd \
+      --input-data ~/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019 \
+      treatment
+
+You should now have two run folders set up for the control and treatment runs:
+
+.. code:: shell
+
+   $ pwd
+   /home/modex_user/output/tem/tem_ee3_warming/control
+
+   $ ls -l
+   drwxr-xr-x 6 modex_user modex_user 4096 Oct 20 22:17 control
+   drwxr-xr-x 6 modex_user modex_user 4096 Oct 20 22:17 warming_2.6C_JJAS_2019   
+
+Now we can start a run in each folder.
+
+.. warning:
+
+   Make sure you do this each of these for both the control and the treatment runs!! Take care to note the 
+   correct path for the the climate file, note the difference in the directory for control and treatment!!
+
+Take care of the last setup steps. **DO THIS FOR EACH RUN**:
+
+   #. :code:`cd` into the run folder
+
+   #. fiddle with the run mask
+
+      .. code::
+
+         pyddt-runmask --reset --yx 0 0 run-mask.nc
+
+   #. setup the output_spec
+
+      .. code::
+
+         pyddt-outspec config/output_spec.csv --on LAYERDZ m l
+         pyddt-outspec config/output_spec.csv --on TLAYER m l
+
+         # Print it out to see what vars we have at what resolution...
+         pyddt-outspec config/output_spec.csv -s             
+                  Name                Units       Yearly      Monthly        Daily          PFT Compartments       Layers    Data Type     Description
+                  GPP            g/m2/time            y                   invalid                                invalid       double     GPP
+               LAYERDZ                    m            y            m      invalid      invalid      invalid            l       double     Thickness of layer
+               TLAYER             degree_C            y            m      invalid      invalid      invalid            l       double     Temperature by layer
+
+   #. adjust the config file to the right climate file
+
+      - this could be alleviated by doing some file shuffling above...i.e.
+         renaming the stitched file to 'historic-climate.nc' in each input folder
+         This would allow the config files to simply point to 'historic-climate.nc' without needing to change the paths for each run.
+
+      .. code:: python
+         :number-lines:
+
+         # Adjust config file...
+         import json
+
+         with open('config/config.js') as f:
+            jd = json.load(f)
+
+         jd['IO']['hist_climate_file'] = "/home/modex_user/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10/transient-scenario-climate.nc"
+
+         with open('config/config.js', 'w') as f:
+            json.dump(jd, f, indent=4)
+
+
+   #. Annoyances out of the way, now we can start the run.
+
+      .. code:: shell
+
+         dvmdostem -f config/config.js -p 15 -e 10 -s 10 -t 150 -l monitor
 
 
 .. note:: from 10/14 brainstorming session
