@@ -209,9 +209,9 @@ Take care of the last setup steps. **DO THIS FOR EACH RUN**:
          # Print it out to see what vars we have at what resolution...
          pyddt-outspec config/output_spec.csv -s             
                   Name                Units       Yearly      Monthly        Daily          PFT Compartments       Layers    Data Type     Description
-                  GPP            g/m2/time            y                   invalid                                invalid       double     GPP
+                   GPP            g/m2/time            y                   invalid                                invalid       double     GPP
                LAYERDZ                    m            y            m      invalid      invalid      invalid            l       double     Thickness of layer
-               TLAYER             degree_C            y            m      invalid      invalid      invalid            l       double     Temperature by layer
+                TLAYER             degree_C            y            m      invalid      invalid      invalid            l       double     Temperature by layer
 
    #. adjust the config file to the right climate file
 
