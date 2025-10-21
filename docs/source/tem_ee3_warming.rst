@@ -241,57 +241,6 @@ Take care of the last setup steps. **DO THIS FOR EACH RUN**:
          dvmdostem -f config/config.js -p 15 -e 10 -s 10 -t 150 -l monitor
 
 
-.. note:: from 10/14 brainstorming session
-
-   #. User starts by finding the inputs provided for workshop (distribution method TBD, but end result will be a folder mounted into the container at :code:`/home/modex_user/workshop_data` )
-   #. User makes a copy of the input dataset they wish to use
-   #. User modifies the copy to create a "treatment" dataset. TODO: consider naming recommendations
-   #. User uses :code:`pyddt-swd` to create a "working directory" for each run (base, treatment)
-
-      - Each run's config will point to the appropriate input dataset (base or treatment)
-
-   #. User runs the model for each configuration
-   #. User analyzes the outputs
-   #. Repeat as needed (more treatments - by copying and adjusting the inputs,
-      or more model runs with different settings by using :code:`pyddt-swd`
-      again)
-   
-
-   
-   
-
-.. note:: draft ...edit rinse, repeat :-)
-
-   We will be running the model at the Toolik Field Station (note from Hannah: Utquiagvik for this one ideally). We will use the demo
-   demonstration data that is shipped with the TEM model for our "control" or
-   "base" run. This data is based on the CRU TS 4.0 dataset.
-
-   We will then create a second input dataset that is identical to the first except
-   that the air temperatures have been increased by 2 degrees Celsius during the
-   summer months (June, July, August) for the years 2000-2015. Update from Hannah: 2019 only, min-July to mid-Sept, 
-   increase temperature by 2.6C.
-
-   This will be our "treatment" or "warming" run.
-
-   We will then compare the outputs of the two runs to see how the warming has
-   affected the model's predictions of various ecosystem variables. Hannah: soil temperature at 10cm depth comparison to observations and between
-   control and warming runs.
-
-
-.. note:: draft of the actual instructions for participants
-
-   do the setup
-
-   make copy of input dataset
-
-   create warming treatment dataset (increase air temp by 2.6C in June-Sept 2019) out of the copy
-
-   create two runfolders, one for control pointing to original input data, one for warming pointing to modified input data
-
-   run both experiments
-
-   analyze the outputs (for that locate the observational data)
-
 .. collapse:: Draft API ideas for creating altered input data
    :class: workshop-collapse
    :name: draft-api
