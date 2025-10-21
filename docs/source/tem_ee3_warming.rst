@@ -111,13 +111,12 @@ dataset:
 
    ./model_examples/TEM/modify_air_temperature.py \
    --input-file inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019/transient-scenario-climate.nc \
-   --years 2019 \
    --months 6 7 8 9 \
    --years 2019 \
    --deviation 2.6
 
    
-As you will see in the statements that are printed out from this scritp it will 
+As you will see in the statements that are printed out from this script it will 
 actually create an new file alongside the existing one. Here we throw out the original file and rename
 the modified version to clean things up.
 
@@ -151,7 +150,7 @@ Now we have two datasets:
 
 .. note:: TODO
 
-   would be nice to show some viz of this...need to use the other container??
+   would be nice to show some viz of this...do we need to use the other container??
 
 Now that we have the datasets set up, we can create two run folders using the 
 :code:`pyddt-swd` utility helper tool. For this we will work in the 
@@ -203,6 +202,7 @@ Take care of the last setup steps. **DO THIS FOR EACH RUN**:
 
       .. code::
 
+         pyddt-outspec config/output_spec.csv --on GPP m p
          pyddt-outspec config/output_spec.csv --on LAYERDZ m l
          pyddt-outspec config/output_spec.csv --on TLAYER m l
 
@@ -219,6 +219,11 @@ Take care of the last setup steps. **DO THIS FOR EACH RUN**:
          renaming the stitched file to 'historic-climate.nc' in each input folder
          This would allow the config files to simply point to 'historic-climate.nc' without needing to change the paths for each run.
 
+      .. warning:: 
+
+         Make sure to use the right path to the the treatment input folder!!
+         You can't just copy/paste these lines for the treatment run!!
+
       .. code:: python
          :number-lines:
 
@@ -229,6 +234,7 @@ Take care of the last setup steps. **DO THIS FOR EACH RUN**:
             jd = json.load(f)
 
          jd['IO']['hist_climate_file'] = "/home/modex_user/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10/transient-scenario-climate.nc"
+         jd['IO']['co2_file'] = "/home/modex_user/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10/transient-scenario-co2.nc"
 
          with open('config/config.js', 'w') as f:
             json.dump(jd, f, indent=4)
