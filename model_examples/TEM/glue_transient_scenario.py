@@ -11,9 +11,19 @@ def run_glue_transient_scenario(input_folder):
   hds = xr.open_dataset(pathlib.Path(input_folder) / "historic-climate.nc")
   pds = xr.open_dataset(pathlib.Path(input_folder) / "projected-climate.nc")
 
-  full_data = xr.concat([hds, pds], dim="time")
+  full_data = xr.concat([hds, pds], 
+                        dim="time", 
+                        data_vars="minimal", 
+                        coords="minimal", 
+                        compat="override", 
+                        join="outer")
 
-  full_data.to_netcdf(pathlib.Path(input_folder) / "transient-scenario-climate.nc")
+
+
+
+  full_data.to_netcdf(pathlib.Path(input_folder) / "transient-scenario-climate.nc", 
+                      mode='w', format='NETCDF4_CLASSIC',
+                      engine='netcdf4')
 
 if __name__ == "__main__":
   import sys
