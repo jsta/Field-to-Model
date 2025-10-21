@@ -282,9 +282,9 @@ COPY --chown=modex_user:modex_user .cime /home/modex_user/.cime
 ENV PATH="/home/modex_user/install_ats/bin:$PATH"
 
 # Need to fix a lot of permissions:
-RUN mkdir ~/inputdata  \
-  && mkdir -p ~/output/elm ~/output/tem \
-  && mkdir -p ~/tools ~/examples/elm ~/examples/ats ~/examples/tem \
+RUN mkdir /inputdata  \
+  && mkdir -p /output/elm /output/tem \
+  && mkdir -p ~/tools ~/model_examples ~/E3SM \
   && chown -R 1001:1001 /home/modex_user \
   && git config --global user.name "ModEx User" \
   && git config --global user.email "ngeearctic@dev.null"
