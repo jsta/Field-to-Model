@@ -70,6 +70,9 @@ Setup
       modex_user@5cf5a55dff62:~$
 
 
+Inputs
+************
+
 Copy the input data that you'd like to use to the input data directory:
 
 .. tip:: 
@@ -125,6 +128,9 @@ that covers 1901-2100. The same applies to the CO2 files.
    This will show you the dimensions and variables in the file, including the
    time dimension which should now span from 1901 to 2100.
 
+Creating the Warming Treatment Dataset
+**********************************************
+
 Now we are going to make copy of this dataset to create our "treatment" or
 "warming" dataset. We will then modify this copy to increase the air temperatures
 by 2.6 degrees Celsius during the summer months (June, July, August, September)
@@ -170,17 +176,19 @@ the modified version to clean things up.
 
 Now we have two datasets:
 
-  * the control dataset: :code:`inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10`
-  * the warming treatment dataset: :code:`inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019`
+* the control dataset: :code:`inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10`
+* the warming treatment dataset: :code:`inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019`
 
 .. note:: TODO
 
    would be nice to show some viz of this...do we need to use the other container??
 
+Setting up the run folders
+**********************************************
+
 Now that we have the datasets set up, we can create two run folders using the 
 :code:`pyddt-swd` utility helper tool. For this we will work in the 
-:code:`~/workshop_runs/tem_ee3_warming` directory.
-
+:code:`~/output/tem_ee3_warming` directory.
 
 .. code:: shell
 
@@ -208,10 +216,8 @@ You should now have two run folders set up for the control and treatment runs:
 
 Now we can start a run in each folder.
 
-.. warning:
-
-   Make sure you do this each of these for both the control and the treatment runs!! Take care to note the 
-   correct path for the the climate file, note the difference in the directory for control and treatment!!
+Running the model
+**********************************************
 
 Take care of the last setup steps. **DO THIS FOR EACH RUN**:
 
@@ -258,9 +264,9 @@ Take care of the last setup steps. **DO THIS FOR EACH RUN**:
 
       .. code:: python
 
-         modex_user@7d5294d0390a:~$ cd output/tem/tem_ee3_warming/control/ 
+         cd output/tem/tem_ee3_warming/control/ 
 
-         modex_user@7d5294d0390a:~/output/tem/tem_ee3_warming/control$ ipython
+         ipython
          Python 3.11.14 | packaged by conda-forge | (main, Oct 13 2025, 14:09:32) [GCC 14.3.0]
          Type 'copyright', 'credits' or 'license' for more information
          IPython 9.6.0 -- An enhanced Interactive Python. Type '?' for help.
@@ -278,88 +284,12 @@ Take care of the last setup steps. **DO THIS FOR EACH RUN**:
             ...:    json.dump(jd, f, indent=4)
 
 
-#. Annoyances out of the way, now we can start the run.
+#. Now we can start the run.
 
    .. code:: shell
 
-      dvmdostem -f config/config.js -p 15 -e 10 -s 10 -t 150 -l monitor
+      dvmdostem -f config/config.js -p 15 -e 10 -s 10 -t 150 -n 0 -l monitor
 
-
-Technical Experiment Setup
-----------------------------
-
-
-.. note:: Draft outline steps from a brainstorming session. Please edit and improve.
-
-   #. What spatial (geographic) area(s) do you want to run. Single or multi-pixel run?
-   
-      Single pixel at Utqiagvik
-
-   #. Is this experiment designed around a single run or multiple runs? If multiple describe what is different between each run.
-
-      Two different runs: the control run and a warming experiment (treatment)
-
-   #. Decide what variables and resolutions you want to have output.
-   
-     soil temperature at 10cm depth, monthly resolution (compared to daily observations but that should be ok)
-
-   #. Which stages to run? How many years for each stage?
-   
-      :code:`-p 100 -e 2000 -s 250 -t 115 -n 85`, Potentially with the option of combining transient and scenario? 
-      Also consider using the restart capability to avoid running eq over and over? In this case we could even shorten 
-      the scenario and just run until 2025 or something. Plot the outputs for 2018 - 2025? 
-
-   #. From which stages do we need to save the output?
-   
-      Transient and scenario; combined, see above
-
-   #. Which Community Type(s) to use?
-   
-      Wet sedge tundra (target PFT from the experiment was a sedge species)
-
-   #. Is this run a calibration (parameter estimation) run? If so, elaborate.
-   
-      No
-
-   #. List some ideas for how you expect to analyze the outputs
-   
-      Plot the control and warming soil temperature at 10cm depth time series for comparison to observations. 
-      Designate control vs warming by color, observations vs model by line style?
-
-   #. What computer will the runs be on?
-      
-      Laptop with Docker container pulled from cloud
-
-   #. Decide where on your computer you want to store your model run(s).
-      
-      User will have a folder on their host, i.e. :code:`~/ngee-modex-2025/workflows` that is mounted inside the container
-
-   #. Decide how to organize the outputs (important if the experiment dictates multiple runs)
-      
-      One folder for "control" one folder for each "treatment case" (I think we said creating a separate 
-      input dataset for each treatment that is stored in the input datda folder, and then creating hte different experiments from the input data folders)
-
-   #. Are the driving inputs and parameters for the specified run(s) available?
-      
-      The specific warming experiment driver will be created as part of the example, the field observation data should be 
-      available somewhere - it's the citation in the header. 
-
-   #. If the experiment is a multi-run experiment, can the different runs be scripted?
-      
-      Not sure yet...see example API above in the intro; only 2 runs so no need to fully automate...
-
-   #. Is the run a single pixel (site) run or a multi pixel?
-      
-      single
-
-   #. Decide on all other run settings/parameters:
-
-      * Is the community type (CMT) fixed or driven by input vegetation.nc map? Fixed: wet sedge tundra
-      * Any other command line options or special environment settings? I don't think so?
-
-   #. Will the plotting happen in the run-time environment or will the data need to be copied to a different environment?
-   
-      
 
 Analysis
 ----------------------------
