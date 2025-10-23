@@ -54,8 +54,8 @@ RUN export mpi_version_major=`echo ${mpi_version} | cut -c1-3` && echo $mpi_vers
   && rm openmpi-${mpi_version}.tar.gz
 
 # Versions change and we cannot set environment variables from command output.
-ARG petsc_ver=
-ARG trilinos_ver=
+ARG petsc_ver=3.20
+ARG trilinos_ver=15-1-0
 ARG amanzi_branch=master
 
 # Installation paths
@@ -221,6 +221,8 @@ RUN export mpi_version_major=`echo ${mpi_version} | cut -c1-3` && echo $mpi_vers
   && rm openmpi-${mpi_version}.tar.gz
 
 # Add an unprivileged user and group: modex_user, modex_user
+ARG petsc_ver=3.20
+ARG trilinos_ver=15-1-0
 RUN mkdir -p /mnt/inputdata /mnt/output
 RUN groupadd -r modex_user -g 1001 \
   && useradd -u 1001 -r -K UMASK=0022 -K HOME_MODE=0755 -m -g modex_user modex_user \
