@@ -87,12 +87,43 @@ This will allow us to run the model in a single stage from 1901-2100 rather than
 having to do a transient run followed by a scenario run. Use the helper script
 in the :code:`model_examples/TEM` directory to do this:
 
+.. collapse:: More info on TEM run stages...
+   :class: workshop-collapse
+   :name: tem-run-stages
+
+   TEM typically runs in multiple stages to cover the full historical and future
+   periods. The typical stages are:
+
+     * Equilibrium (EQ): Run model to reach a steady state using pre-industrial climate data.
+     * Spinup (SP): Further spin-up using historical climate data.
+     * Transient (TR): Run model with historical climate data from 1901 to present.
+     * Scenario (SC): Run model with future climate projections from present to 2100.
+   
+   By gluing the transient and scenario datasets together, we can simplify the
+   run process into a single stage covering 1901-2100.
+
 .. code:: shell
 
    ./model_examples/TEM/glue_transient_scenario.py inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10
       
 Now if you look in the new directory, you should see a new file called
-:code:`transient-historic-climate.nc` which contains the glued together climate.
+:code:`stock-historic-climate.nc` which is the original file that came with the
+dataset. The file :code:`historic-climate.nc` is now the glued together version
+that covers 1901-2100. The same applies to the CO2 files.
+
+.. collapse:: Examining a NetCDF file.
+   :class: workshop-collapse
+   :name: ncdump-glued
+
+   You can use the :code:`ncdump` utility to inspect the contents of the new
+   netCDF file. For example:
+
+   .. code:: shell
+
+      ncdump -h inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10/historic-climate.nc
+
+   This will show you the dimensions and variables in the file, including the
+   time dimension which should now span from 1901 to 2100.
 
 Now we are going to make copy of this dataset to create our "treatment" or
 "warming" dataset. We will then modify this copy to increase the air temperatures
@@ -110,38 +141,32 @@ dataset:
 .. code:: shell
 
    ./model_examples/TEM/modify_air_temperature.py \
-   --input-file inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019/transient-scenario-climate.nc \
+   --input-file inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019/historic-climate.nc \
    --months 6 7 8 9 \
    --years 2019 \
    --deviation 2.6
 
    
-As you will see in the statements that are printed out from this script it will 
-actually create an new file alongside the existing one. Here we throw out the original file and rename
-the modified version to clean things up.
-
-.. code:: shell
-
-   mv inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019/modified_transient-scenario-climate.nc \
-      inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019/transient-scenario-climate.nc
-
-.. note:: 
+.. collapse:: Details about the modification script
+   :class: workshop-collapse
+   :name: modify-script-details
 
    The modification script uses :code:`xarray` under the hood to manipulate
    the netCDF data. It creates a boolean mask for the time dimension based
    on the specified years and months, and then applies the temperature deviation
    only to those selected time points.
 
-.. note:: TODO
-
-   Do we want to clean up the historic and scenario files in each input now that
-   we've got the glue together version? Probably not necessary but could help
-   avoid confusion....
-
-.. note:: 
-
    The modification script can take additional arguments to modify multiple
-   years and different months as needed. See the help message for details:
+   years and different months as needed. See the help message for details.
+
+As you will see in the statements that are printed out from this script it will 
+actually create an new file alongside the existing one. Here we throw out the original file and rename
+the modified version to clean things up.
+
+.. code:: shell
+
+   mv inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019/modified_historic-climate.nc \
+      inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019/historic-climate.nc
 
 Now we have two datasets:
 
@@ -162,12 +187,12 @@ Now that we have the datasets set up, we can create two run folders using the
    mkdir -p ~/output/tem/tem_ee3_warming
    cd ~/output/tem/tem_ee3_warming
 
-   pyddt-swd \
-      --input-data ~/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10 \
+   pyddt-swd --input-data \
+      ~/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10 \
       control
 
-   pyddt-swd \
-      --input-data ~/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019 \
+   pyddt-swd --input-data \
+      ~/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019 \
       treatment
 
 You should now have two run folders set up for the control and treatment runs:
@@ -190,89 +215,75 @@ Now we can start a run in each folder.
 
 Take care of the last setup steps. **DO THIS FOR EACH RUN**:
 
-   #. :code:`cd` into the run folder
+#. Change into the run folder, e.g. :code:`cd ~/output/tem/tem_ee3_warming/control`.
 
-   #. fiddle with the run mask
+#. Adjust the run mask so that only a single pixel is enabled.
 
-      .. code::
+   .. code::
 
-         pyddt-runmask --reset --yx 0 0 run-mask.nc
+      pyddt-runmask --reset --yx 0 0 run-mask.nc
 
-   #. setup the output_spec
+#. Setup the output specification file. This is a `:code:`csv` file that tells 
+   the model which variables to output and at what resolution. You can edit it 
+   by hand but it's easier to use the :code:`pyddt-outspec` utility to add the
+   variables you want. 
 
-      .. code::
+   .. code::
 
-         pyddt-outspec config/output_spec.csv --on GPP m p
-         pyddt-outspec config/output_spec.csv --on LAYERDZ m l
-         pyddt-outspec config/output_spec.csv --on TLAYER m l
+      pyddt-outspec config/output_spec.csv --on GPP m p
+      pyddt-outspec config/output_spec.csv --on LAYERDZ m l
+      pyddt-outspec config/output_spec.csv --on TLAYER m l
 
-         # Print it out to see what vars we have at what resolution...
-         pyddt-outspec config/output_spec.csv -s             
-                  Name                Units       Yearly      Monthly        Daily          PFT Compartments       Layers    Data Type     Description
-                   GPP            g/m2/time            y                   invalid                                invalid       double     GPP
-               LAYERDZ                    m            y            m      invalid      invalid      invalid            l       double     Thickness of layer
-                TLAYER             degree_C            y            m      invalid      invalid      invalid            l       double     Temperature by layer
+      # Print it out to see what vars we have at what resolution...
+      pyddt-outspec config/output_spec.csv -s
+               Name                Units       Yearly      Monthly        Daily          PFT Compartments       Layers    Data Type     Description
+                GPP            g/m2/time            y                   invalid                                invalid       double     GPP
+            LAYERDZ                    m            y            m      invalid      invalid      invalid            l       double     Thickness of layer
+             TLAYER             degree_C            y            m      invalid      invalid      invalid            l       double     Temperature by layer
 
-   #. adjust the config file to the right climate file
 
-      - this could be alleviated by doing some file shuffling above...i.e.
-         renaming the stitched file to 'historic-climate.nc' in each input folder
-         This would allow the config files to simply point to 'historic-climate.nc' without needing to change the paths for each run.
+#. Optional - config file settings.
 
-      .. warning:: 
+   Expand this section to see a discussion of adjusting the config file.
 
-         Make sure to use the right path to the the treatment input folder!!
-         You can't just copy/paste these lines for the treatment run!!
+   .. collapse:: Example of adjusting config file settings
+      :class: workshop-collapse
+      :name: alt-file-shuffle
+
+      The config file is a :code:`json` file that contains a bunch of settings
+      for the run. You may want to look through the file to see what things
+      are available for changing. You can edit the file directly with a text
+      editor, or you can use a small script to do it programmatically or in 
+      an interactive Python session, as in the following example.
 
       .. code:: python
-         :number-lines:
 
-         # Adjust config file...
-         import json
+         modex_user@7d5294d0390a:~$ cd output/tem/tem_ee3_warming/control/ 
 
-         with open('config/config.js') as f:
-            jd = json.load(f)
+         modex_user@7d5294d0390a:~/output/tem/tem_ee3_warming/control$ ipython
+         Python 3.11.14 | packaged by conda-forge | (main, Oct 13 2025, 14:09:32) [GCC 14.3.0]
+         Type 'copyright', 'credits' or 'license' for more information
+         IPython 9.6.0 -- An enhanced Interactive Python. Type '?' for help.
+         Tip: Put a ';' at the end of a line to suppress the printing of output.
 
-         jd['IO']['hist_climate_file'] = "/home/modex_user/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10/transient-scenario-climate.nc"
-         jd['IO']['co2_file'] = "/home/modex_user/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10/transient-scenario-co2.nc"
+         In [1]: import json
 
-         with open('config/config.js', 'w') as f:
-            json.dump(jd, f, indent=4)
+         In [2]: with open('config/config.js') as f:
+            ...:   jd = json.load(f)
 
+         In [3]: jd['IO']['hist_climate_file'] = "/home/modex_user/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10/transient-scenario-climate.nc"
+         In [4]: jd['IO']['co2_file'] = "/home/modex_user/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10/transient-scenario-co2.nc"
 
-   #. Annoyances out of the way, now we can start the run.
-
-      .. code:: shell
-
-         dvmdostem -f config/config.js -p 15 -e 10 -s 10 -t 150 -l monitor
+         In [5]: with open('config/config.js', 'w') as f:
+            ...:    json.dump(jd, f, indent=4)
 
 
-.. collapse:: Draft API ideas for creating altered input data
-   :class: workshop-collapse
-   :name: draft-api
+#. Annoyances out of the way, now we can start the run.
 
-   .. code:: python
+   .. code:: shell
 
-      warming_experiment(deviation=2, sign='+', year=2015, month=May, 
-                        original_data=/path/to/data 
-                        altered_data=/path/to/users/experiment/director)  
+      dvmdostem -f config/config.js -p 15 -e 10 -s 10 -t 150 -l monitor
 
-      warming_experiment(deviation=2, sign='+', year=2015, month=May, 
-                        original_data=/path/to/data 
-                        altered_data=/path/to/users/experiment/director)
-
-   Similar for precipitation
-
-   .. code:: python
-
-      precip_experiment(
-         mm=2,
-         sign='+',
-         year=2020,
-         month=January,
-         original_data=/path/to/data
-         altered_data=/path/to/users/experiment/director
-      )
 
 Technical Experiment Setup
 ----------------------------
