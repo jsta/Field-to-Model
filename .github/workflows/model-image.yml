@@ -5,7 +5,7 @@ on:
   push:
     branches: [ "**" ]
     paths:
-      - "**/Dockerfile*"
+      - "**/Dockerfile-models"
       - ".gitmodules"
       - ".github/workflows/model-image.yml"
 
