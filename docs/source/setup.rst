@@ -34,13 +34,13 @@ with the following commands:
 
 Then once you have the images you can run them with the following commands:
 
-.. code:: Running the model container
+.. code::
 
     docker run -it --rm \
         -v <path_to_your_workshop_data>:/home/workshop_data \
         yuanfornl/ngee-arctic-modex25:model-main-latest /bin/bash
 
-.. code:: Running the visualization container
+.. code::
 
     docker run -it --rm \
         -v <path_to_your_workshop_data>:/home/workshop_data \
