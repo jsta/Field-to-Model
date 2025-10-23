@@ -14,8 +14,10 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
+          file: Docker/Dockerfile-docs
           push: false
           outputs: type=local,dest=/build
+
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
