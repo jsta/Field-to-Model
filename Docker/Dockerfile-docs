@@ -1,11 +1,11 @@
 # The image for building and serving the sphinx docs.
 # Build with: 
-#     docker build --tag docbuilder --target docbuilder -f Docker/Dockerfile-models . 
-FROM sphinxdoc/sphinx as docbuilder
+#     docker build --tag docbuilder --target docbuilder -f Docker/Dockerfile-docs .
+FROM sphinxdoc/sphinx AS docbuilder
 
-RUN pip install sphinx-toolbox
-RUN pip install myst-parser
-RUN pip install sphinx-autobuild
+COPY docs/requirements.txt /tmp/requirements.txt
+
+RUN pip install -r /tmp/requirements.txt
 
 WORKDIR /docs
 
