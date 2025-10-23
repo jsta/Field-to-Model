@@ -221,7 +221,7 @@ RUN export mpi_version_major=`echo ${mpi_version} | cut -c1-3` && echo $mpi_vers
   && rm openmpi-${mpi_version}.tar.gz
 
 # Add an unprivileged user and group: modex_user, modex_user
-RUN mkdir /mnt/inputdata /mnt/output
+RUN mkdir -p /mnt/inputdata /mnt/output
 RUN groupadd -r modex_user -g 1001 \
   && useradd -u 1001 -r -K UMASK=0022 -K HOME_MODE=0755 -m -g modex_user modex_user \
   && chown -R 1001:1001 /home/modex_user /mnt
