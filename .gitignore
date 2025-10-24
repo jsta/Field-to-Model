@@ -10,3 +10,4 @@ docs/build/**
 .gitconfig
 .viminfo
 .wget-hsts
+.vim
