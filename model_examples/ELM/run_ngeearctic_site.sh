@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # =======================================================================================
 # Setup and run an ELM OLMT simulation for an NGEE Arctic site
 #
@@ -238,7 +238,7 @@ echo " "
 echo " "
 
 echo "**** Running OLMT: "
-if python3 ./site_fullrun.py \
+if /opt/conda/bin/python ./site_fullrun.py \
       --site ${site_code} --sitegroup ${site_group} --caseidprefix ${case_prefix} \
       ${sim_years} --tstep ${timestep} --machine docker \
       --compiler gnu --mpilib openmpi \

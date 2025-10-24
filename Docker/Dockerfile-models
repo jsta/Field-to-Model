@@ -193,7 +193,7 @@ RUN wget https://github.com/conda-forge/miniforge/releases/download/${MINIFORGE_
     && rm /tmp/miniforge.sh
 
 # Make conda available
-ENV PATH=/opt/conda/bin:$PATH
+ENV PATH=$PATH:/opt/conda/bin
 
 # Create a Python 3.11 environment
 RUN mamba install -y python=3.11 \
@@ -240,6 +240,15 @@ ENV  AMANZI_PETSC_LIBS=$AMANZI_TPLS_DIR/petsc-${petsc_ver}/lib \
   
 ENV HDF5_DIR=/opt/ats/tpls \
     LD_LIBRARY_PATH=${AMANZI_TPLS_DIR}/lib:${AMANZI_PETSC_LIBS}:${AMANZI_TRILINOS_LIBS}:${AMANZI_SEACAS_LIBS}:/usr/local/lib64:/usr/local/lib:/usr/lib 
+
+# Set a bunch of environment variables for compilers
+ENV USER=modex_user \
+  CC=/usr/local/bin/mpicc \
+  CXX=/usr/local/bin/mpicxx \
+  FC=/usr/local/bin/mpifort \
+  MPICC=/usr/local/bin/mpicc \
+  MPICXX=/usr/local/bin/mpicxx \
+  MPIFC=/usr/local/bin/mpifort
 
 ################ TEM ####################
 
@@ -289,3 +298,5 @@ RUN mkdir -p ~/tools ~/model_examples ~/E3SM \
   && chown -R 1001:1001 /home/modex_user \
   && git config --global user.name "ModEx User" \
   && git config --global user.email "ngeearctic@dev.null"
+
+
