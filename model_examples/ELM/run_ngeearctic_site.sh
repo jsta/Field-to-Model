@@ -181,8 +181,24 @@ echo " "
 # EACH OF THESE SITES ALSO NEEDS THE SURFFILE, LU FILE, DOMAIN FILE SPECIFIED>
 if [ ${site_name} = beo ]; then
   site_code="AK-BEOG"
+  surf_file="surfdata_1x1pt_beo-GRID_simyr1850_c360x720_c171002.nc"
+  landuse_file="landuse.timeseries_1x1pt_beo-GRID_simyr1850-2015_c180423.nc"
+  domain_file="domain.lnd.1x1pt_beo-GRID_navy.nc"
+  if [ ${met_source} = era5 ]; then
+    met_path="/mnt/inputdata/atm/datm7/dapper/utq"
+  elif [ ${met_source} = gswp3 ]; then
+    met_path=
+  fi
 elif [ ${site_name} = council ]; then
   site_code="AK-CLG"
+  surf_file="surfdata_1x1pt_council-GRID_simyr1850_c360x720_c171002.nc"
+  landuse_file="MISSING"
+  domain_file="domain.lnd.1x1pt_council-GRID_navy.nc"
+  if [ ${met_source} = era5 ]; then
+    met_path="/mnt/inputdata/atm/datm7/dapper/cnl"
+  elif [ ${met_source} = gswp3 ]; then
+    met_path=
+  fi
 elif [ ${site_name} = kougarok ]; then
   site_code="AK-K64G"
   surf_file="surfdata_1x1pt_kougarok-GRID_simyr1850_c360x720_c171002.nc"
@@ -191,16 +207,64 @@ elif [ ${site_name} = kougarok ]; then
   met_path="/mnt/inputdata/atm/datm7/dapper/kg"
 elif [ ${site_name} = teller ]; then
   site_code="AK-TLG"
+  surf_file="surfdata_1x1pt_teller-GRID_simyr1850_c360x720_c171002.nc"
+  landuse_file="landuse.timeseries_1x1pt_teller-GRID_simyr1850-2015_c180423.nc"
+  domain_file="domain.lnd.1x1pt_teller-GRID_navy.nc"
+  if [ ${met_source} = era5 ]; then
+    met_path="/mnt/inputdata/atm/datm7/dapper/tl"
+  elif [ ${met_source} = gswp3 ]; then
+    met_path=
+  fi
 elif [ ${site_name} = toolik_lake ]; then
   site_code="AK-Tlk"
+  surf_file="surfdata_1x1pt_ToolikLake-GRID_simyr1850_c360x720_c250306.nc"
+  landuse_file="landuse.timeseries_1x1pt_ToolikLake-GRID_simyr1850-2015_c250306.nc"
+  domain_file="domain.lnd.1x1pt_ToolikLake-GRID.nc"
+  if [ ${met_source} = era5 ]; then
+    met_path="/mnt/inputdata/atm/datm7/dapper/tfs"
+  elif [ ${met_source} = gswp3 ]; then
+    met_path=
+  fi
 elif [ ${site_name} = trail_valley_creek ]; then
   site_code="CA-TVC"
+  surf_file="surfdata_1x1pt_TrailValleyCreek-GRID_simyr1850_c360x720_c250306.nc"
+  landuse_file="landuse.timeseries_1x1pt_TrailValleyCreek-GRID_simyr1850-2015_c250306.nc"
+  domain_file="domain.lnd.1x1pt_TrailValleyCreek-GRID.nc"
+  if [ ${met_source} = era5 ]; then
+    met_path="/mnt/inputdata/atm/datm7/dapper/tvc"
+  elif [ ${met_source} = gswp3 ]; then
+    met_path=
+  fi
 elif [ ${site_name} = abisko ]; then
   site_code="SE-Abi"
+  surf_file="surfdata_1x1pt_Abisko-GRID_simyr1850_c360x720_c250306.nc"
+  landuse_file="landuse.timeseries_1x1pt_Abisko-GRID_simyr1850-2015_c250306.nc"
+  domain_file="domain.lnd.1x1pt_Abisko-GRID.nc"
+  if [ ${met_source} = era5 ]; then
+    met_path="/mnt/inputdata/atm/datm7/dapper/abs"
+  elif [ ${met_source} = gswp3 ]; then
+    met_path=
+  fi
 elif [ ${site_name} = bayelva ]; then
   site_code="NO-SJB"
+  surf_file="surfdata_1x1pt_SJ-BlvBayelva-GRID_simyr1850_c360x720_c250306.nc"
+  landuse_file="landuse.timeseries_1x1pt_SJ-BlvBayelva-GRID_simyr1850-2015_c250306.nc"
+  domain_file="domain.lnd.1x1pt_SJ-BlvBayelva-GRID.nc"
+  if [ ${met_source} = era5 ]; then
+    met_path="/mnt/inputdata/atm/datm7/dapper/bs"
+  elif [ ${met_source} = gswp3 ]; then
+    met_path=
+  fi
 elif [ ${site_name} = samoylov_island ]; then
   site_code="RU-Sam"
+  surf_file="surfdata_1x1pt_SamoylovIsland-GRID_simyr1850_c360x720_c250306.nc"
+  landuse_file="landuse.timeseries_1x1pt_SamoylovIsland-GRID_simyr1850-2015_c250306.nc"
+  domain_file="domain.lnd.1x1pt_SamoylovIsland-GRID.nc"
+  if [ ${met_source} = era5 ]; then
+    met_path="MISSING"
+  elif [ ${met_source} = gswp3 ]; then
+    met_path=
+  fi
 else 
   echo " "
   echo "**** EXECUTION HALTED ****"
