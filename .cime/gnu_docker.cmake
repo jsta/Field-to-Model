@@ -12,6 +12,7 @@ string(APPEND CXX_LIBS " -lstdc++")
 string(APPEND SLIBS " -L$ENV{HDF5_ROOT}/lib -lhdf5_fortran -lhdf5 -lhdf5_hl -lhdf5_hl_fortran")
 string(APPEND SLIBS " -L$ENV{NETCDF_PATH}/lib/ -lnetcdff -lnetcdf -lcurl -lblas -llapack")
 set(NETCDF_PATH "$ENV{NETCDF_PATH}")
+set(NETCDF_DIR "$ENV{NETCDF_PATH}")
 
 # set some compiler options:
 set(CMAKE_C_COMPILER /usr/local/bin/mpicc CACHE FILEPATH "")

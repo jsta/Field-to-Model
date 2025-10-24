@@ -223,7 +223,9 @@ RUN export mpi_version_major=`echo ${mpi_version} | cut -c1-3` && echo $mpi_vers
 # Add an unprivileged user and group: modex_user, modex_user
 ARG petsc_ver=3.20
 ARG trilinos_ver=15-1-0
-RUN mkdir -p /mnt/inputdata /mnt/output /opt/dvmdostem
+RUN git config --system user.name "ModEx User" \
+  && git config --system user.email "ngeearctic@dev.null" \
+  && mkdir -p /mnt/inputdata /mnt/output /opt/dvmdostem
 RUN groupadd -r modex_user -g 1001 \
   && useradd -u 1001 -r -K UMASK=0022 -K HOME_MODE=0755 -m -g modex_user modex_user \
   && chown -R 1001:1001 /home/modex_user /mnt /opt
@@ -249,6 +251,7 @@ ENV USER=modex_user \
   MPICC=/usr/local/bin/mpicc \
   MPICXX=/usr/local/bin/mpicxx \
   MPIFC=/usr/local/bin/mpifort
+
 
 ################ TEM ####################
 
@@ -295,8 +298,6 @@ ENV PATH="/opt/ats/bin:$PATH"
 
 # Need to fix a lot of permissions:
 RUN mkdir -p ~/tools ~/model_examples ~/E3SM \
-  && chown -R 1001:1001 /home/modex_user \
-  && git config --global user.name "ModEx User" \
-  && git config --global user.email "ngeearctic@dev.null"
+  && chown -R 1001:1001 /home/modex_user
 
 
