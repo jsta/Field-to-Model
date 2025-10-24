@@ -93,6 +93,10 @@ case $i in
     startdate_scale_pdep="${i#*=}"
     shift
     ;;
+    -ms=*|--met_source=*)
+    met_source="${i#*=}"
+    shift
+    ;;
     *)
         # unknown option
     ;;
@@ -108,6 +112,7 @@ case_prefix="${case_prefix:-NGEE-Arctic}"
 ad_spinup_years="${ad_spinup_years:-200}"
 final_spinup_years="${final_spinup_years:-600}"
 transient_years="${transient_years:--1}"
+met_source="${met_source:-era5}"
 # -1 is the default
 timestep="${timestep:-1}"
 # temp and co2 additions:
@@ -171,13 +176,19 @@ echo " "
 # =======================================================================================
 
 # =======================================================================================
+# specify met dir prefix
 # Set site codes for OLMT
+# EACH OF THESE SITES ALSO NEEDS THE SURFFILE, LU FILE, DOMAIN FILE SPECIFIED>
 if [ ${site_name} = beo ]; then
   site_code="AK-BEOG"
 elif [ ${site_name} = council ]; then
   site_code="AK-CLG"
 elif [ ${site_name} = kougarok ]; then
   site_code="AK-K64G"
+  surf_file="surfdata_1x1pt_kougarok-GRID_simyr1850_c360x720_c171002.nc"
+  landuse_file="landuse.timeseries_1x1pt_kougarok-GRID_simyr1850-2015_c180423.nc"
+  domain_file="domain.lnd.1x1pt_kougarok-GRID_navy.nc"
+  met_path="/mnt/inputdata/atm/datm7/dapper/kg"
 elif [ ${site_name} = teller ]; then
   site_code="AK-TLG"
 elif [ ${site_name} = toolik_lake ]; then
@@ -220,17 +231,18 @@ runcmd="python3 ./site_fullrun.py \
       --site ${site_code} --sitegroup ${site_group} --caseidprefix ${case_prefix} \
       ${sim_years} --tstep ${timestep} --machine docker \
       --compiler gnu --mpilib openmpi \
-      --cpl_bypass --gswp3 \
+      --cpl_bypass --${met_source} \
       --model_root /E3SM \
       --caseroot /mnt/output \
       --ccsm_input /mnt/inputdata \
       --runroot /mnt/output \
       --spinup_vars \
       --nopointdata \
-      --metdir /mnt/inputdata/atm/datm7/atm_forcing.datm7.GSWP3.0.5d.v2.c180716_NGEE-Grid/cpl_bypass_${site_name}-Grid \
-      --domainfile /mnt/inputdata/share/domains/domain.clm/domain.lnd.1x1pt_${site_name}-GRID_navy.nc \
-      --surffile /mnt/inputdata/lnd/clm2/surfdata_map/surfdata_1x1pt_${site_name}-GRID_simyr1850_c360x720_c171002.nc \
-      --landusefile /mnt/inputdata/lnd/clm2/surfdata_map/landuse.timeseries_1x1pt_${site_name}-GRID_simyr1850-2015_c180423.nc \
+      --metdir ${met_path} \
+      --domainfile /mnt/inputdata/share/domains/domain.clm/${domain_file} \
+      --surffile /mnt/inputdata/lnd/clm2/surfdata_map/${surf_file} \
+      --landusefile /mnt/inputdata/lnd/clm2/surfdata_map/${landuse_file} \
+      --srcmods_loc /home/modex_user/tools/OLMT/srcmods_era5cb /
       ${scaling_args} \
       & sleep 10"
 echo ${runcmd}
@@ -242,17 +254,18 @@ if /opt/conda/bin/python ./site_fullrun.py \
       --site ${site_code} --sitegroup ${site_group} --caseidprefix ${case_prefix} \
       ${sim_years} --tstep ${timestep} --machine docker \
       --compiler gnu --mpilib openmpi \
-      --cpl_bypass --gswp3 \
+      --cpl_bypass --${met_source} \
       --model_root ~/E3SM \
       --caseroot /mnt/output \
       --ccsm_input /mnt/inputdata \
       --runroot /mnt/output \
       --spinup_vars \
       --nopointdata \
-      --metdir /mnt/inputdata/atm/datm7/atm_forcing.datm7.GSWP3.0.5d.v2.c180716_NGEE-Grid/cpl_bypass_${site_name}-Grid \
-      --domainfile /mnt/inputdata/share/domains/domain.clm/domain.lnd.1x1pt_${site_name}-GRID_navy.nc \
-      --surffile /mnt/inputdata/lnd/clm2/surfdata_map/surfdata_1x1pt_${site_name}-GRID_simyr1850_c360x720_c171002.nc \
-      --landusefile /mnt/inputdata/lnd/clm2/surfdata_map/landuse.timeseries_1x1pt_${site_name}-GRID_simyr1850-2015_c180423.nc \
+      --metdir ${met_path} \
+      --domainfile /mnt/inputdata/share/domains/domain.clm/${domain_file} \
+      --surffile /mnt/inputdata/lnd/clm2/surfdata_map/${surf_file} \
+      --landusefile /mnt/inputdata/lnd/clm2/surfdata_map/${landuse_file} \
+      --srcmods_loc /home/modex_user/tools/OLMT/srcmods_era5cb \
       ${scaling_args} \
       & sleep 10
 
