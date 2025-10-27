@@ -1,5 +1,6 @@
-TEM Disturbance Experiment (Fire breakout group)
+TEM Precipitation Experiment (Hydrology/snow/vegetation interactions breakout group)
 ================================================
+
 
 .. note::
    

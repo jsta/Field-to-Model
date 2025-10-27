@@ -188,12 +188,12 @@ Setting up the run folders
 
 Now that we have the datasets set up, we can create two run folders using the 
 :code:`pyddt-swd` utility helper tool. For this we will work in the 
-:code:`/mnt/output/tem_ee3_warming` directory.
+:code:`/mnt/output/tem_ee1_warming` directory.
 
 .. code:: shell
 
-   mkdir -p /mnt/output/tem/tem_ee3_warming
-   cd /mnt/output/tem/tem_ee3_warming
+   mkdir -p /mnt/output/tem/tem_ee1_warming
+   cd /mnt/output/tem/tem_ee1_warming
 
    pyddt-swd --input-data \
       /mnt/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10 \
@@ -208,7 +208,7 @@ You should now have two run folders set up for the control and treatment runs:
 .. code:: shell
 
    $ pwd
-   /mnt/output/tem/tem_ee3_warming/control
+   /mnt/output/tem/tem_ee1_warming/control
 
    $ ls -l
    drwxr-xr-x 6 modex_user modex_user 4096 Oct 20 22:17 control
@@ -221,7 +221,7 @@ Running the model
 
 Take care of the last setup steps. **DO THIS FOR EACH RUN**:
 
-#. Change into the run folder, e.g. :code:`cd /mnt/output/tem/tem_ee3_warming/control`.
+#. Change into the run folder, e.g. :code:`cd /mnt/output/tem/tem_ee1_warming/control`.
 
 #. Adjust the run mask so that only a single pixel is enabled.
 
@@ -264,7 +264,7 @@ Take care of the last setup steps. **DO THIS FOR EACH RUN**:
 
       .. code:: python
 
-         cd /mnt/output/tem/tem_ee3_warming/control/
+         cd /mnt/output/tem/tem_ee1_warming/control/
 
          ipython
          Python 3.11.14 | packaged by conda-forge | (main, Oct 13 2025, 14:09:32) [GCC 14.3.0]
