@@ -82,7 +82,7 @@ Copy the input data that you'd like to use to the input data directory:
 
 .. code:: shell
 
-   cp -r install_dvmdostem/demo-data/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10 inputdata/
+   cp -r /opt/dvmdostem/demo-data/* /mnt/inputdata/
 
 Next, to make the experiment and analysis easier, we will glue together the 
 historic and projected (scenario) climate data into a single continuous dataset.
@@ -107,8 +107,8 @@ in the :code:`model_examples/TEM` directory to do this:
 
 .. code:: shell
 
-   ./model_examples/TEM/glue_transient_scenario.py inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10
-      
+   ./model_examples/TEM/glue_transient_scenario.py /mnt/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10
+
 Now if you look in the new directory, you should see a new file called
 :code:`stock-historic-climate.nc` which is the original file that came with the
 dataset. The file :code:`historic-climate.nc` is now the glued together version
@@ -123,7 +123,7 @@ that covers 1901-2100. The same applies to the CO2 files.
 
    .. code:: shell
 
-      ncdump -h inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10/historic-climate.nc
+      ncdump -h /mnt/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10/historic-climate.nc
 
    This will show you the dimensions and variables in the file, including the
    time dimension which should now span from 1901 to 2100.
@@ -138,8 +138,8 @@ for the year 2019.
 
 .. code:: shell
 
-   cp -r inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10 \
-     inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019
+   cp -r /mnt/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10 \
+     /mnt/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019
 
 Now we will run the helper script to modify the air temperatures in the new
 dataset:
@@ -147,7 +147,7 @@ dataset:
 .. code:: shell
 
    ./model_examples/TEM/modify_air_temperature.py \
-   --input-file inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019/historic-climate.nc \
+   --input-file /mnt/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019/historic-climate.nc \
    --months 6 7 8 9 \
    --years 2019 \
    --deviation 2.6
@@ -166,18 +166,18 @@ dataset:
    years and different months as needed. See the help message for details.
 
 As you will see in the statements that are printed out from this script it will 
-actually create an new file alongside the existing one. Here we throw out the original file and rename
-the modified version to clean things up.
+actually create an new file alongside the existing one. Here we throw out the 
+original file and rename the modified version to clean things up.
 
 .. code:: shell
 
-   mv inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019/modified_historic-climate.nc \
-      inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019/historic-climate.nc
+   mv /mnt/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019/modified_historic-climate.nc \
+      /mnt/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019/historic-climate.nc
 
 Now we have two datasets:
 
-* the control dataset: :code:`inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10`
-* the warming treatment dataset: :code:`inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019`
+* the control dataset: :code:`/mnt/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10`
+* the warming treatment dataset: :code:`/mnt/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019`
 
 .. note:: TODO
 
@@ -188,19 +188,19 @@ Setting up the run folders
 
 Now that we have the datasets set up, we can create two run folders using the 
 :code:`pyddt-swd` utility helper tool. For this we will work in the 
-:code:`~/output/tem_ee3_warming` directory.
+:code:`/mnt/output/tem_ee3_warming` directory.
 
 .. code:: shell
 
-   mkdir -p ~/output/tem/tem_ee3_warming
-   cd ~/output/tem/tem_ee3_warming
+   mkdir -p /mnt/output/tem/tem_ee3_warming
+   cd /mnt/output/tem/tem_ee3_warming
 
    pyddt-swd --input-data \
-      ~/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10 \
+      /mnt/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10 \
       control
 
    pyddt-swd --input-data \
-      ~/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019 \
+      /mnt/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019 \
       treatment
 
 You should now have two run folders set up for the control and treatment runs:
@@ -208,7 +208,7 @@ You should now have two run folders set up for the control and treatment runs:
 .. code:: shell
 
    $ pwd
-   /home/modex_user/output/tem/tem_ee3_warming/control
+   /mnt/output/tem/tem_ee3_warming/control
 
    $ ls -l
    drwxr-xr-x 6 modex_user modex_user 4096 Oct 20 22:17 control
@@ -221,7 +221,7 @@ Running the model
 
 Take care of the last setup steps. **DO THIS FOR EACH RUN**:
 
-#. Change into the run folder, e.g. :code:`cd ~/output/tem/tem_ee3_warming/control`.
+#. Change into the run folder, e.g. :code:`cd /mnt/output/tem/tem_ee3_warming/control`.
 
 #. Adjust the run mask so that only a single pixel is enabled.
 
@@ -264,7 +264,7 @@ Take care of the last setup steps. **DO THIS FOR EACH RUN**:
 
       .. code:: python
 
-         cd output/tem/tem_ee3_warming/control/ 
+         cd /mnt/output/tem/tem_ee3_warming/control/
 
          ipython
          Python 3.11.14 | packaged by conda-forge | (main, Oct 13 2025, 14:09:32) [GCC 14.3.0]
@@ -277,8 +277,8 @@ Take care of the last setup steps. **DO THIS FOR EACH RUN**:
          In [2]: with open('config/config.js') as f:
             ...:   jd = json.load(f)
 
-         In [3]: jd['IO']['hist_climate_file'] = "/home/modex_user/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10/transient-scenario-climate.nc"
-         In [4]: jd['IO']['co2_file'] = "/home/modex_user/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10/transient-scenario-co2.nc"
+         In [3]: jd['IO']['hist_climate_file'] = "/mnt/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10/transient-scenario-climate.nc"
+         In [4]: jd['IO']['co2_file'] = "/mnt/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10/transient-scenario-co2.nc"
 
          In [5]: with open('config/config.js', 'w') as f:
             ...:    json.dump(jd, f, indent=4)
