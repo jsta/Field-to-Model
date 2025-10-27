@@ -5,13 +5,19 @@
     {
       "name": ".buildinfo",
       "digest": {
-        "sha256": "0cb16d9f2c762be65f61619519556c2ceae0124c5c16b3128e724e71a56c1053"
+        "sha256": "650043ea4309d031345f1e50b3bd39d2fca1cef0b34aa39a170f1c13244474d1"
       }
     },
     {
       "name": "_sources/dev_notes.rst.txt",
       "digest": {
         "sha256": "b8779d55b8c9324d0ac976fb264f8df2bf8ab2ea76b88804026332450f85d5d0"
+      }
+    },
+    {
+      "name": "_sources/elm_intro.rst.txt",
+      "digest": {
+        "sha256": "42c9cfb5277a7cc8f55247a5b53bb8a55677f6f60b5549d8caed1c602919a412"
       }
     },
     {
@@ -23,7 +29,7 @@
     {
       "name": "_sources/setup.rst.txt",
       "digest": {
-        "sha256": "db3ded672dd742af3d33952bc9cfeced2659430505ac7cbd5e30b5c19fd06bbf"
+        "sha256": "a9a130847a4f84772ea256c57da272647f34e0cfef0cb108b3c125cd0dd2d7d6"
       }
     },
     {
@@ -41,7 +47,7 @@
     {
       "name": "_static/basic.css",
       "digest": {
-        "sha256": "80b2240539b36d344e7c9aa5090995a773ffae1dd90f21cc043e6057d9543c3d"
+        "sha256": "656ff1bacd6f260fc7d71b97f9c2f1fcbf692dc84bf469cd952034efcb9eefed"
       }
     },
     {
@@ -53,7 +59,7 @@
     {
       "name": "_static/doctools.js",
       "digest": {
-        "sha256": "81cb2da3c284e429a1a63ab28a20b7e30bceb8eb1556a154c8cbac0b4ce7795b"
+        "sha256": "2992c09df91826a8d33e3b48b645ee77e457adcf7c712d776a814e1e2c448b43"
       }
     },
     {
@@ -71,7 +77,7 @@
     {
       "name": "_static/language_data.js",
       "digest": {
-        "sha256": "dba8b1d8dce11dadb39bd24d2babdb617a57f8f27e04c614269c937b785df00a"
+        "sha256": "3bc311563b7fc5e80fcab2f8629774bf3cb6b30202000df36dff8e695a9023b7"
       }
     },
     {
@@ -83,7 +89,7 @@
     {
       "name": "_static/nature.css",
       "digest": {
-        "sha256": "79b82c4062b3f8e72cae7364642efd8ae4c22da5f53f5b7e0d296c08704c8158"
+        "sha256": "3ee7530a7432a06f1f9487ce82cc155a1d9ce2502ce751529f53205d998f2e59"
       }
     },
     {
@@ -101,7 +107,7 @@
     {
       "name": "_static/searchtools.js",
       "digest": {
-        "sha256": "8abac35df3630c203fad510e66f2f9e0725a79080b8be96111e238a071500805"
+        "sha256": "371b49c7f094b525244e2a59d7809a6b946fc1c8791201d10dda1dd191133bb7"
       }
     },
     {
@@ -113,61 +119,67 @@
     {
       "name": "dev_notes.html",
       "digest": {
-        "sha256": "f0d156a24a8e235d94d5c50b5ad3b4c05a743ad7d17019a4a1c5931ffa6941e3"
+        "sha256": "eec9342fe5707ad3499d385778f87f586727f3d3ec5ffceeef5f8dbb4183f3b9"
+      }
+    },
+    {
+      "name": "elm_intro.html",
+      "digest": {
+        "sha256": "cd80097132151b1f808105d74e69b793e694967ca90ec382f5fff74dcff9e413"
       }
     },
     {
       "name": "genindex.html",
       "digest": {
-        "sha256": "0b1fed04e432a41a9f962e05266e5205dbb5c7c391a839c8da463d53246cdc02"
+        "sha256": "ab8b7b2d7b908c3c8de8860fcb90da1ab40c69ad95c2909981ec461eaa4065f3"
       }
     },
     {
       "name": "index.html",
       "digest": {
-        "sha256": "c550862ddbd3f805654f53909bd3d9617ed9b8fcb8f3b99e9f768445c4f635dd"
+        "sha256": "971ec858f2d24ccaeb0d50d43902276a104a7a938d4d18b6349f5831e56f6943"
       }
     },
     {
       "name": "objects.inv",
       "digest": {
-        "sha256": "602ee10fe79233feaec9f48356ff79b9be0b9599c1567bf87e4789e9519cef50"
+        "sha256": "1f9fedd4bd93f3fddc3407d42ad4a9133e485c6ab96c7a269667c0ac4152a57e"
       }
     },
     {
       "name": "search.html",
       "digest": {
-        "sha256": "04d781f9cfba31da3eaf914b4a3b34988481242507afc467d4f27641add0b421"
+        "sha256": "909417c530707be1af293bd88e75e1bcd08d5655fb79830ef11450fd64bd85d5"
       }
     },
     {
       "name": "searchindex.js",
       "digest": {
-        "sha256": "ddb080a1984d8fd34514c0cbd93a3292229620667b5c61b5e39a22dad035a25d"
+        "sha256": "5814a1d8880e45a87ae4a49f5bb0821b973dabac25298a07dba6ea0da41e73fd"
       }
     },
     {
       "name": "setup.html",
       "digest": {
-        "sha256": "27dc2203f711864f4a74de4d03fde48cb0d47cf7f803ca44f8c7f4afb0b037ab"
+        "sha256": "03a6550fda6cf03b043fbc0346e4db39b0575f81b2648ef445d95fb32b146235"
       }
     },
     {
       "name": "tem_dev_notes.html",
       "digest": {
-        "sha256": "b70a0a7aa8f895c4122c225c26e83cfd8959a5c5d9590c1537572824e0e396dc"
+        "sha256": "e245f7443da26f8d07afcd001cea68f6c92e1090f027e9e5323c9782f211344a"
       }
     },
     {
       "name": "tem_ee3_warming.html",
       "digest": {
-        "sha256": "d0b45ce722283d0c74a38e545282077e37fd38be6fdf01e0cc34760db9707eea"
+        "sha256": "f4e744a6b16c63a2cb9e905a2335376fe5070c6a4acaab46d0d73f8decc6da6e"
       }
     }
   ],
   "predicate": {
     "builder": {
-      "id": "https://github.com/jsta/Field-to-Model/actions/runs/18763089893/attempts/1"
+      "id": "https://github.com/jsta/Field-to-Model/actions/runs/18849717939/attempts/1"
     },
     "buildType": "https://mobyproject.org/buildkit@v1",
     "materials": [
@@ -443,21 +455,21 @@
         }
       ],
       "digestMapping": {
-        "sha256:0da0e19770af7bbf68ef78125f75cbf7c102519a760cb619308fa278becdc176": "step3",
-        "sha256:1e770e7f296e72741b28ced9763f24f99ba2894362e19867717f270059189058": "step2",
-        "sha256:3be1176253eb3ee49512f54ec862f6fd4baa4f5b4113a8b7ce14cd3f613b2692": "step6",
-        "sha256:3ca351dce1163951010a096d84ccea40eb6f11510e28140cc437129ea41586a9": "step5",
+        "sha256:28d54542100c804647af724ae5ae6b31a540ef02737ba2fc41b768287726ef71": "step1",
+        "sha256:37e7f027d2b79abb121e46f6e47c3eda4517bc35f082f11a3e16a1d252b337a4": "step5",
+        "sha256:396cefef82a1abf1160f434b16b26e35ee4ec76fd80201616bed88212d454335": "step8",
+        "sha256:3b003c0a381b0ede3739012eebbcf73f97f1796e9aa0570cdc1d3da589240d8d": "step4",
         "sha256:495dde8bb048f85f9e257b18e77c7e688416cf924929b77b94e0a7f41b788de0": "step0",
-        "sha256:5b2b13824cf244be0b865cc4958219ad83080440128d8c061ad311ffa9a5239d": "step1",
-        "sha256:69a7c5fb9e24363f4908e39a5b99e84940ab83a87cb71162808d00bef75c2e21": "step4",
-        "sha256:d1332dc4fd464db512d3daadca1699620775adc3cfb665ebef9e159badd40f63": "step7",
-        "sha256:ef3cc3d31ba9aa2704d51c183bbc3b49a8c0257dff2bee8afd605bfcde6367d2": "step8"
+        "sha256:8c565a8e2efe8350b986f88b814f45f5cc3a5e9e6e805cb60ddabef1b9394703": "step7",
+        "sha256:abd2e69408506d00f950e4953c43994e8fa65cea7c450becebd4d62b48671f69": "step2",
+        "sha256:e6153f205b51d69cedc0287a855c9f7f1a462b4286bb3816a374f7c9c81956b2": "step3",
+        "sha256:f9ab325e3eebb6cd3cc6873b48c946da390a8a8080878e7e4587bcfd2984b6d4": "step6"
       }
     },
     "metadata": {
-      "buildInvocationID": "xgf0e15pjwvj2fqbfl17se0ig",
-      "buildStartedOn": "2025-10-23T21:57:23.31838934Z",
-      "buildFinishedOn": "2025-10-23T21:57:36.362973391Z",
+      "buildInvocationID": "i99g76xhizqkkf9bfy4o25seg",
+      "buildStartedOn": "2025-10-27T17:13:34.49350349Z",
+      "buildFinishedOn": "2025-10-27T17:13:44.560377919Z",
       "completeness": {
         "parameters": true,
         "environment": true,
@@ -468,7 +480,7 @@
         "vcs": {
           "localdir:context": ".",
           "localdir:dockerfile": "Docker",
-          "revision": "f50fd5ef091c13fe926c2eeb85450ed4e6c525ef",
+          "revision": "c79da396014ef6f7d3de3164912150575899dc84",
           "source": "https://github.com/jsta/Field-to-Model"
         },
         "source": {
@@ -620,8 +632,8 @@
                 }
               ],
               "digestMapping": {
-                "sha256:1d0e889dc63cd0563c0acedbf75ab333c0a16561a49b3dcbeadf1c1c5212cc67": "step0",
-                "sha256:52c2491b03b03ab19d2951481d2d6c9f5ecc34262ff552be9006526a9f0256a7": "step1"
+                "sha256:2925a8ce690e506e6fb4a46e1707e60d92437d47813384f1c9e041dde67f622f": "step1",
+                "sha256:860f739893742dad092ed27918e3c613ed8f3f44c8e4babb1f26164b94ed9ff7": "step0"
               }
             }
           ]
