@@ -7,6 +7,26 @@
 # Phase 4 additional sites: Toolik_Lake, Abisko, Trail_Valley_Creek, Samoylov_Island, Bayelva
 # =======================================================================================
 
+# Print out options and help statements
+# RPF - IN PROGRESS - FINISH 10/27/25
+Help()
+{
+    echo "Usage: $(basename $0) [-h|--help] [additional options]"
+    echo "Options:"
+    echo "  -h, --help          Display this help message"
+    echo "  --site_name         Which NGEE site would you like to run? Available options:"
+    echo "                      Phase 3 sites: kougarok, teller, council, beo"
+    echo "                      Phase 4 sites: abisko, trail_valley_creek, toolik_lake,"
+    echo "                        samoylov_island, bayelva"
+    echo "  --site_group        Which Amanzi branch should be used when building container? (Default: master)"
+    echo "  --case_prefix       Where does the Amanzi repo reside on the current system?"
+    echo "                      (Default: /ascem/amanzi/repos/amanzi-master)"
+    echo "  --met_source        Select which meteorological forcing you would like to use. ERA5 or GSWP3 (Default: ERA5)"
+    echo "  --use_arctic_init   Use modified startup condition for Arctic conditions. (ELM default is soil moisture of 0.15 m3/m3"
+    echo "                      and 274K. Modified condition is at liquid saturation and at 250+40*cos(lat) K)"
+    exit 0
+}
+
 cwd=$(pwd)
 cd /home/modex_user/tools/OLMT
 
@@ -17,15 +37,19 @@ do
 # coerce to lowercase to prevent case issues:
 i="${i,,}"
 case $i in
-    -sn=*|--site_name=*)
+    -h|--help)
+    Help
+    shift
+    ;;
+    --site_name=*)
     site_name="${i#*=}"
     shift
     ;;
-    -sg=*|--site_group=*)
+    --site_group=*)
     site_group="${i#*=}"
     shift 
     ;;
-    -cp=*|--case_prefix=*)
+    --case_prefix=*)
     case_prefix="${i#*=}"
     shift
     ;;
