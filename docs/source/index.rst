@@ -18,9 +18,7 @@ Here you will find resources and documentation needed to follow the workshop exa
   :caption: Modeling Exercises
   :numbered: 3
 
-  tem_ee3_warming
-  tem_ee3_precipitation
-  tem_ee3_fire
+  tem_ee1_warming
 
 
 .. toctree::
