@@ -19,6 +19,7 @@ Here you will find resources and documentation needed to follow the workshop exa
   :numbered: 3
 
   tem_ee1_warming
+  elm_intro
 
 
 .. toctree::
