@@ -53,7 +53,7 @@ case $i in
     case_prefix="${i#*=}"
     shift
     ;;
-    -adsy=*|--ad_spinup_years=*)
+    -ady=*|--ad_spinup_years=*)
     ad_spinup_years="${i#*=}"
     shift
     ;;
@@ -61,7 +61,7 @@ case $i in
     final_spinup_years="${i#*=}"
     shift
     ;;
-    -trsy=*|--transient_years=*)
+    -try=*|--transient_years=*)
     transient_years="${i#*=}"
     shift
     ;;
@@ -323,7 +323,7 @@ runcmd="python3 ./site_fullrun.py \
       --model_root /E3SM \
       --caseroot /mnt/output \
       --ccsm_input /mnt/inputdata \
-      --runroot /mnt/output \
+      --runroot /mnt/output/cime_run_dirs \
       --spinup_vars \
       --nopointdata \
       --metdir ${met_path} \
@@ -346,14 +346,14 @@ if /opt/conda/bin/python ./site_fullrun.py \
       --model_root ~/E3SM \
       --caseroot /mnt/output \
       --ccsm_input /mnt/inputdata \
-      --runroot /mnt/output \
+      --runroot /mnt/output/cime_run_dirs \
       --spinup_vars \
       --nopointdata \
       --metdir ${met_path} \
       --domainfile /mnt/inputdata/share/domains/domain.clm/${domain_file} \
       --surffile /mnt/inputdata/lnd/clm2/surfdata_map/${surf_file} \
       --landusefile /mnt/inputdata/lnd/clm2/surfdata_map/${landuse_file} \
-      --srcmods_loc /home/modex_user/tools/OLMT/srcmods_era5cb \
+      --srcmods_loc /home/modex_user/tools/olmt/srcmods_era5cb \
       ${scaling_args} \
       & sleep 10
 
