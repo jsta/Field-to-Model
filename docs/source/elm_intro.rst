@@ -63,4 +63,10 @@ note::
 
 Under the hood
 --------------
-The script we have developed simplifies the interface to the Offline Land Model Testbed (OLMT), developed by Dan Ricciuto (ORNL). OLMT itself simplifies the setup of model cases necessary to spin up an ELM simulation from a 'cold start' condition. (Figure of hierarchy?). OLMT sets up three cases that run consecutively: an 'accelerated' decomposition spin up that features accelerated biogeochemical cycling, a second stage of spin up with normal biogeochemical cycling rates, and finally a transient run that starts in 1850 and continues to near present (depending on how long the forcing datasets run). OLMT automates the setup of these cases through the E3SM case control system (CIME - Common Infrastructure for Modeling the Earth).
+The script we have developed simplifies the interface to the Offline Land Model Testbed (OLMT), developed by
+Dan Ricciuto (ORNL). OLMT itself simplifies the setup of model cases necessary to spin up an ELM simulation from
+a 'cold start' condition. (Figure of hierarchy?). OLMT sets up three cases that run consecutively: an 'accelerated'
+decomposition spin up that features accelerated biogeochemical cycling, a second stage of spin up with normal
+biogeochemical cycling rates, and finally a transient run that starts in 1850 and continues to near present
+(depending on how long the forcing datasets run). OLMT automates the setup of these cases through the E3SM case
+control system (CIME - Common Infrastructure for Modeling the Earth).
