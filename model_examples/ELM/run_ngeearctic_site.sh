@@ -8,22 +8,37 @@
 # =======================================================================================
 
 # Print out options and help statements
-# RPF - IN PROGRESS - FINISH 10/27/25
 Help()
 {
     echo "Usage: $(basename $0) [-h|--help] [additional options]"
     echo "Options:"
-    echo "  -h, --help          Display this help message"
-    echo "  --site_name         Which NGEE site would you like to run? Available options:"
-    echo "                      Phase 3 sites: kougarok, teller, council, beo"
-    echo "                      Phase 4 sites: abisko, trail_valley_creek, toolik_lake,"
-    echo "                        samoylov_island, bayelva"
-    echo "  --site_group        Which Amanzi branch should be used when building container? (Default: master)"
-    echo "  --case_prefix       Where does the Amanzi repo reside on the current system?"
-    echo "                      (Default: /ascem/amanzi/repos/amanzi-master)"
-    echo "  --met_source        Select which meteorological forcing you would like to use. ERA5 or GSWP3 (Default: ERA5)"
-    echo "  --use_arctic_init   Use modified startup condition for Arctic conditions. (ELM default is soil moisture of 0.15 m3/m3"
-    echo "                      and 274K. Modified condition is at liquid saturation and at 250+40*cos(lat) K)"
+    echo "  -h, --help                Display this help message"
+    echo "  --site_name               Which NGEE site would you like to run? Available options:"
+    echo "                            Phase 3 sites: kougarok, teller, council, beo"
+    echo "                            Phase 4 sites: abisko, trail_valley_creek, toolik_lake,"
+    echo "                              samoylov_island, bayelva"
+    echo "  --site_group              Which Amanzi branch should be used when building container? (Default: master)"
+    echo "  --case_prefix             Where does the Amanzi repo reside on the current system?"
+    echo "                            (Default: /ascem/amanzi/repos/amanzi-master)"
+    echo "  --met_source              Select which meteorological forcing you would like to use. ERA5 or GSWP3 (Default: ERA5)"
+    echo "  --use_arctic_init         Use modified startup condition for Arctic conditions. (ELM default is soil moisture of 0.15 m3/m3"
+    echo "                            and 274K. Modified condition is at liquid saturation and at 250+40*cos(lat) K)"
+    echo "  -ady, --ad_spinup_yrs     How many years of initial spinup using accelerated decomposition rates"
+    echo "                              should be used? (Default: 200)"
+    echo "  -fsy, --final_spinup_yrs  How many years should the second stage of spinup run (with normal"
+    echo "                              decomposition rates? (Default: 600)"
+    echo "  -try, --transient_yrs     How many years should the transient stage of the sumulation run?"
+    echo "                              (Default: -1, which corresponds to 1850-2014 for GSWP3 met data and"
+    echo "                              1850-2024 for ERA5)"
+    echo "  -tsp, --timestep          What timestep should the model use? (Default: 1 hour, units of this number"
+    echo "                               should be hours)"
+    echo "  --met_source              What met source should be used? (Default: ERA5, can also use GSWP3)"
+    echo "  --add_temperature         Add a constant temperature to the meteorology time series, in K"
+    echo "  --startdate_add_temperature   When should the temperature perturbation be initiated?"
+    echo "                                (It will continue to the end of the run). YYYYMMDD format"
+    echo "  --add_co2                 Add a constant value of CO2 to the CO2 forcing data stream (in ppm)"
+    echo "  --startdate_add_co2       When should the CO2 perturbation be initiated? (Will continue to end of run), YYYYMMDD format"
+    echo "  --mod_parm_file           Use a modified PFT parameter file (Note, requires full path)"
     exit 0
 }
 
@@ -34,8 +49,6 @@ cd /home/modex_user/tools/OLMT
 # Get the input options from the command line
 for i in "$@"
 do
-# coerce to lowercase to prevent case issues:
-i="${i,,}"
 case $i in
     -h|--help)
     Help
@@ -43,6 +56,7 @@ case $i in
     ;;
     --site_name=*)
     site_name="${i#*=}"
+    site_name="${site_name,,}"
     shift
     ;;
     --site_group=*)
@@ -53,15 +67,15 @@ case $i in
     case_prefix="${i#*=}"
     shift
     ;;
-    -adsy=*|--ad_spinup_years=*)
+    -ady=*|--ad_spinup_yrs=*)
     ad_spinup_years="${i#*=}"
     shift
     ;;
-    -fsy=*|--final_spinup_years=*)
+    -fsy=*|--final_spinup_yrs=*)
     final_spinup_years="${i#*=}"
     shift
     ;;
-    -trsy=*|--transient_years=*)
+    -try=*|--transient_yrs=*)
     transient_years="${i#*=}"
     shift
     ;;
@@ -69,19 +83,19 @@ case $i in
     timestep="${i#*=}"
     shift
     ;;
-    -addt=*|--add_temperature=*)
+    --add_temperature=*)
     add_temperature="${i#*=}"
     shift
     ;;
-    -sdaddt=*|--startdate_add_temperature=*)
+    --startdate_add_temperature=*)
     startdate_add_temperature="${i#*=}"
     shift
     ;;    
-    -addco2=*|--add_co2=*)
+    --add_co2=*)
     add_co2="${i#*=}"
     shift
     ;;
-    -sdaddco2=*|--startdate_add_co2=*)
+    --startdate_add_co2=*)
     startdate_add_co2="${i#*=}"
     shift
     ;;    
@@ -119,6 +133,10 @@ case $i in
     ;;
     -ms=*|--met_source=*)
     met_source="${i#*=}"
+    shift
+    ;;
+    --use_arctic_init)
+    use_arctic_init=True
     shift
     ;;
     *)
@@ -165,36 +183,40 @@ echo "Case Prefix = ${case_prefix}"
 echo "Number of AD Spinup Simulation Years = ${ad_spinup_years}"
 echo "Number of Final Spinup Simulation Years = ${final_spinup_years}"
 echo "Number of Transient Simulation Years = ${transient_years}"
-echo "Model Timestep = ${timestep}"
+echo "Model Timestep = ${timestep} hours"
 if [ ${add_temperature} != 0.0 ]; then
   echo "Adding ${add_temperature} degreesC to forcing temperature starting on ${startdate_add_temperature}"
-  scaling_args="--add_temperature ${add_temperature} --startdate_add_temperature ${startdate_add_temperature}"
+  options="--add_temperature ${add_temperature} --startdate_add_temperature ${startdate_add_temperature}"
 fi
 if [ ${add_co2} != 0.0 ]; then
   echo "Adding ${add_co2} ppm to forcing CO2 starting on ${startdate_add_co2}"
-  scaling_args="$scaling_args --add_co2 ${add_co2} --startdate_add_co2 ${startdate_add_co2}"
+  options="$options --add_co2 ${add_co2} --startdate_add_co2 ${startdate_add_co2}"
 fi
 if [ ${scale_rain} != 1.0 ]; then
   echo "Forcing rainfall scaled by factor of ${scale_rain} starting on ${startdate_scale_rain}"
-  scaling_args="$scaling_args --scale_rain ${scale_rain} --startdate_scale_rain ${startdate_scale_rain}"
+  options="$options --scale_rain ${scale_rain} --startdate_scale_rain ${startdate_scale_rain}"
 fi
 if [ ${scale_snow} != 1.0 ]; then
   echo "Forcing snowfall scaled by factor of ${scale_snow} starting on ${startdate_scale_snow}"
-  scaling_args="$scaling_args  --scale_snow ${scale_snow} --startdate_scale_snow ${startdate_scale_snow}"
+  options="$options  --scale_snow ${scale_snow} --startdate_scale_snow ${startdate_scale_snow}"
 fi
 if [ ${scale_ndep} != 1.0 ]; then
   echo "N deposition scaled by factor of ${scale_ndep} starting on ${startdate_scale_ndep}"
-  scaling_args="$scaling_args --scale_ndep ${scale_ndep} --startdate_scale_ndep ${startdate_scale_ndep}"
+  options="$options --scale_ndep ${scale_ndep} --startdate_scale_ndep ${startdate_scale_ndep}"
 fi 
 if [ ${scale_pdep} != 1.0 ]; then
   echo "P deposition scaled by factor of ${scale_pdep} starting on ${startdate_scale_pdep}"
-  scaling_args="$scaling_args --scale_pdep ${scale_pdep} --startdate_scale_pdep ${startdate_scale_pdep}"
+  options="$options --scale_pdep ${scale_pdep} --startdate_scale_pdep ${startdate_scale_pdep}"
 fi
 if [ ${transient_years} != -1 ]; then
   sim_years="--nyears_ad_spinup ${ad_spinup_years} --nyears_final_spinup ${final_spinup_years} \
   --nyears_transient ${transient_years}"
 else
   sim_years="--nyears_ad_spinup ${ad_spinup_years} --nyears_final_spinup ${final_spinup_years}"
+fi
+if [ ${use_arctic_init} == True ]; then
+  echo "Using wetter, colder initialization conditions for Arctic runs"
+  options="$options --use_arctic_init"
 fi
 echo " "
 # =======================================================================================
@@ -285,7 +307,7 @@ elif [ ${site_name} = samoylov_island ]; then
   landuse_file="landuse.timeseries_1x1pt_SamoylovIsland-GRID_simyr1850-2015_c250306.nc"
   domain_file="domain.lnd.1x1pt_SamoylovIsland-GRID.nc"
   if [ ${met_source} = era5 ]; then
-    met_path="MISSING"
+    met_path="/mnt/inputdata/atm/datm7/dapper/si"
   elif [ ${met_source} = gswp3 ]; then
     met_path=
   fi
@@ -299,14 +321,13 @@ else
   echo "NORWAY/SVALBARD: bayelva" 
   echo "RUSSIA: samoylov_island"
   exit 0
-  echo " "
 fi
 echo "OLMT Site Code: ${site_code}"
 # =======================================================================================
 
 # =======================================================================================
 # pause to show options before continuing
-sleep 5
+sleep 10
 echo " "
 echo " "
 # =======================================================================================
@@ -323,7 +344,7 @@ runcmd="python3 ./site_fullrun.py \
       --model_root /E3SM \
       --caseroot /mnt/output \
       --ccsm_input /mnt/inputdata \
-      --runroot /mnt/output \
+      --runroot /mnt/output/cime_run_dirs \
       --spinup_vars \
       --nopointdata \
       --metdir ${met_path} \
@@ -331,7 +352,7 @@ runcmd="python3 ./site_fullrun.py \
       --surffile /mnt/inputdata/lnd/clm2/surfdata_map/${surf_file} \
       --landusefile /mnt/inputdata/lnd/clm2/surfdata_map/${landuse_file} \
       --srcmods_loc /home/modex_user/tools/OLMT/srcmods_era5cb /
-      ${scaling_args} \
+      ${options} \
       & sleep 10"
 echo ${runcmd}
 echo " "
@@ -346,15 +367,15 @@ if /opt/conda/bin/python ./site_fullrun.py \
       --model_root ~/E3SM \
       --caseroot /mnt/output \
       --ccsm_input /mnt/inputdata \
-      --runroot /mnt/output \
+      --runroot /mnt/output/cime_run_dirs \
       --spinup_vars \
       --nopointdata \
       --metdir ${met_path} \
       --domainfile /mnt/inputdata/share/domains/domain.clm/${domain_file} \
       --surffile /mnt/inputdata/lnd/clm2/surfdata_map/${surf_file} \
       --landusefile /mnt/inputdata/lnd/clm2/surfdata_map/${landuse_file} \
-      --srcmods_loc /home/modex_user/tools/OLMT/srcmods_era5cb \
-      ${scaling_args} \
+      --srcmods_loc /home/modex_user/tools/olmt/srcmods_era5cb \
+      ${options} \
       & sleep 10
 
 then
@@ -363,10 +384,9 @@ then
   echo "DONE docker ELM runs !"
 
 else
-  exit &?
+  exit 1
 fi
 # =======================================================================================
-
 # =======================================================================================
 #### Postprocess
 ### Collapse transient simulation output into a single netCDF file
