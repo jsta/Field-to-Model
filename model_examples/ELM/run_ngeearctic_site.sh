@@ -49,8 +49,6 @@ cd /home/modex_user/tools/OLMT
 # Get the input options from the command line
 for i in "$@"
 do
-# coerce to lowercase to prevent case issues:
-i="${i,,}"
 case $i in
     -h|--help)
     Help
@@ -58,6 +56,7 @@ case $i in
     ;;
     --site_name=*)
     site_name="${i#*=}"
+    site_name="${site_name,,}"
     shift
     ;;
     --site_group=*)
@@ -308,7 +307,7 @@ elif [ ${site_name} = samoylov_island ]; then
   landuse_file="landuse.timeseries_1x1pt_SamoylovIsland-GRID_simyr1850-2015_c250306.nc"
   domain_file="domain.lnd.1x1pt_SamoylovIsland-GRID.nc"
   if [ ${met_source} = era5 ]; then
-    met_path="MISSING"
+    met_path="/mnt/inputdata/atm/datm7/dapper/si"
   elif [ ${met_source} = gswp3 ]; then
     met_path=
   fi
@@ -322,7 +321,6 @@ else
   echo "NORWAY/SVALBARD: bayelva" 
   echo "RUSSIA: samoylov_island"
   exit 0
-  echo " "
 fi
 echo "OLMT Site Code: ${site_code}"
 # =======================================================================================
@@ -386,10 +384,9 @@ then
   echo "DONE docker ELM runs !"
 
 else
-  exit &?
+  exit 1
 fi
 # =======================================================================================
-
 # =======================================================================================
 #### Postprocess
 ### Collapse transient simulation output into a single netCDF file
