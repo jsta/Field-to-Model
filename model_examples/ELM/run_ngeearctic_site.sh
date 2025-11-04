@@ -17,9 +17,10 @@ Help()
     echo "                            Phase 3 sites: kougarok, teller, council, beo"
     echo "                            Phase 4 sites: abisko, trail_valley_creek, toolik_lake,"
     echo "                              samoylov_island, bayelva"
-    echo "  --site_group              Which Amanzi branch should be used when building container? (Default: master)"
-    echo "  --case_prefix             Where does the Amanzi repo reside on the current system?"
-    echo "                            (Default: /ascem/amanzi/repos/amanzi-master)"
+    echo "  --site_group              OLMT allows different site groups to be specified - for the "
+    echo "                              workshop this will always be NGEE-Arctic"
+    echo "  --case_prefix             What should be appended to the beginning of the casename to distinguish"
+    echo "                              between two runs at the same site?"
     echo "  --met_source              Select which meteorological forcing you would like to use. ERA5 or GSWP3 (Default: ERA5)"
     echo "  --use_arctic_init         Use modified startup condition for Arctic conditions. (ELM default is soil moisture of 0.15 m3/m3"
     echo "                            and 274K. Modified condition is at liquid saturation and at 250+40*cos(lat) K)"
@@ -214,7 +215,7 @@ if [ ${transient_years} != -1 ]; then
 else
   sim_years="--nyears_ad_spinup ${ad_spinup_years} --nyears_final_spinup ${final_spinup_years}"
 fi
-if [ "${use_arctic_init}" == True ]; then
+if [ ${use_arctic_init} == True ]; then
   echo "Using wetter, colder initialization conditions for Arctic runs"
   options="$options --use_arctic_init"
 fi
@@ -231,7 +232,7 @@ if [ ${site_name} = beo ]; then
   landuse_file="landuse.timeseries_1x1pt_beo-GRID_simyr1850-2015_c180423.nc"
   domain_file="domain.lnd.1x1pt_beo-GRID_navy.nc"
   if [ ${met_source} = era5 ]; then
-    met_path="/mnt/inputdata/atm/datm7/dapper/utq"
+    met_path="/mnt/inputdata/atm/datm7/era5/utq"
   elif [ ${met_source} = gswp3 ]; then
     met_path=
   fi
@@ -241,7 +242,7 @@ elif [ ${site_name} = council ]; then
   landuse_file="MISSING"
   domain_file="domain.lnd.1x1pt_council-GRID_navy.nc"
   if [ ${met_source} = era5 ]; then
-    met_path="/mnt/inputdata/atm/datm7/dapper/cnl"
+    met_path="/mnt/inputdata/atm/datm7/era5/cnl"
   elif [ ${met_source} = gswp3 ]; then
     met_path=
   fi
@@ -250,14 +251,14 @@ elif [ ${site_name} = kougarok ]; then
   surf_file="surfdata_1x1pt_kougarok-GRID_simyr1850_c360x720_c171002.nc"
   landuse_file="landuse.timeseries_1x1pt_kougarok-GRID_simyr1850-2015_c180423.nc"
   domain_file="domain.lnd.1x1pt_kougarok-GRID_navy.nc"
-  met_path="/mnt/inputdata/atm/datm7/dapper/kg"
+  met_path="/mnt/inputdata/atm/datm7/era5/kg"
 elif [ ${site_name} = teller ]; then
   site_code="AK-TLG"
   surf_file="surfdata_1x1pt_teller-GRID_simyr1850_c360x720_c171002.nc"
   landuse_file="landuse.timeseries_1x1pt_teller-GRID_simyr1850-2015_c180423.nc"
   domain_file="domain.lnd.1x1pt_teller-GRID_navy.nc"
   if [ ${met_source} = era5 ]; then
-    met_path="/mnt/inputdata/atm/datm7/dapper/tl"
+    met_path="/mnt/inputdata/atm/datm7/era5/tl"
   elif [ ${met_source} = gswp3 ]; then
     met_path=
   fi
@@ -267,7 +268,7 @@ elif [ ${site_name} = toolik_lake ]; then
   landuse_file="landuse.timeseries_1x1pt_ToolikLake-GRID_simyr1850-2015_c250306.nc"
   domain_file="domain.lnd.1x1pt_ToolikLake-GRID.nc"
   if [ ${met_source} = era5 ]; then
-    met_path="/mnt/inputdata/atm/datm7/dapper/tfs"
+    met_path="/mnt/inputdata/atm/datm7/era5/tfs"
   elif [ ${met_source} = gswp3 ]; then
     met_path=
   fi
@@ -277,7 +278,7 @@ elif [ ${site_name} = trail_valley_creek ]; then
   landuse_file="landuse.timeseries_1x1pt_TrailValleyCreek-GRID_simyr1850-2015_c250306.nc"
   domain_file="domain.lnd.1x1pt_TrailValleyCreek-GRID.nc"
   if [ ${met_source} = era5 ]; then
-    met_path="/mnt/inputdata/atm/datm7/dapper/tvc"
+    met_path="/mnt/inputdata/atm/datm7/era5/tvc"
   elif [ ${met_source} = gswp3 ]; then
     met_path=
   fi
@@ -287,7 +288,7 @@ elif [ ${site_name} = abisko ]; then
   landuse_file="landuse.timeseries_1x1pt_Abisko-GRID_simyr1850-2015_c250306.nc"
   domain_file="domain.lnd.1x1pt_Abisko-GRID.nc"
   if [ ${met_source} = era5 ]; then
-    met_path="/mnt/inputdata/atm/datm7/dapper/abs"
+    met_path="/mnt/inputdata/atm/datm7/era5/abs"
   elif [ ${met_source} = gswp3 ]; then
     met_path=
   fi
@@ -297,7 +298,7 @@ elif [ ${site_name} = bayelva ]; then
   landuse_file="landuse.timeseries_1x1pt_SJ-BlvBayelva-GRID_simyr1850-2015_c250306.nc"
   domain_file="domain.lnd.1x1pt_SJ-BlvBayelva-GRID.nc"
   if [ ${met_source} = era5 ]; then
-    met_path="/mnt/inputdata/atm/datm7/dapper/bs"
+    met_path="/mnt/inputdata/atm/datm7/era5/bs"
   elif [ ${met_source} = gswp3 ]; then
     met_path=
   fi
@@ -307,7 +308,7 @@ elif [ ${site_name} = samoylov_island ]; then
   landuse_file="landuse.timeseries_1x1pt_SamoylovIsland-GRID_simyr1850-2015_c250306.nc"
   domain_file="domain.lnd.1x1pt_SamoylovIsland-GRID.nc"
   if [ ${met_source} = era5 ]; then
-    met_path="/mnt/inputdata/atm/datm7/dapper/si"
+    met_path="/mnt/inputdata/atm/datm7/era5/si"
   elif [ ${met_source} = gswp3 ]; then
     met_path=
   fi
@@ -342,7 +343,7 @@ runcmd="python3 ./site_fullrun.py \
       --compiler gnu --mpilib openmpi \
       --cpl_bypass --${met_source} \
       --model_root /E3SM \
-      --caseroot /mnt/output \
+      --caseroot /mnt/output/cime_case_dirs \
       --ccsm_input /mnt/inputdata \
       --runroot /mnt/output/cime_run_dirs \
       --spinup_vars \
@@ -365,7 +366,7 @@ if /opt/conda/bin/python ./site_fullrun.py \
       --compiler gnu --mpilib openmpi \
       --cpl_bypass --${met_source} \
       --model_root ~/E3SM \
-      --caseroot /mnt/output \
+      --caseroot /mnt/output/cime_case_dirs \
       --ccsm_input /mnt/inputdata \
       --runroot /mnt/output/cime_run_dirs \
       --spinup_vars \
