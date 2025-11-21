@@ -148,6 +148,7 @@ done
 # =======================================================================================
 
 # =======================================================================================
+
 # Set defaults and print the selected options back to the screen before running
 site_name="${site_name:-kougarok}"
 site_group="${site_group:-NGEEArctic}"
@@ -173,6 +174,10 @@ scale_ndep="${scale_ndep:-1.0}"
 startdate_scale_ndep="${startdate_scale_ndep:-99991231}"
 scale_pdep="${scale_pdep:-1.0}"
 startdate_scale_pdep="${startdate_scale_pdep:-99991231}"
+
+
+#enforce met naming in prefix
+case_prefix=${case_prefix}_${met_source}
 
 # print back selected or set options to the user
 echo " "
@@ -215,7 +220,8 @@ if [ ${transient_years} != -1 ]; then
 else
   sim_years="--nyears_ad_spinup ${ad_spinup_years} --nyears_final_spinup ${final_spinup_years}"
 fi
-if [ ${use_arctic_init} == True ]; then
+
+if [ ${use_arctic_init} = True ]; then
   echo "Using wetter, colder initialization conditions for Arctic runs"
   options="$options --use_arctic_init"
 fi
@@ -226,10 +232,25 @@ echo " "
 # specify met dir prefix
 # Set site codes for OLMT
 # EACH OF THESE SITES ALSO NEEDS THE SURFFILE, LU FILE, DOMAIN FILE SPECIFIED>
-met_root_gswp3="mnt/inputdata/atm/datm7/gswp3"
-met_root_era5="mnt/inputdata/atm/datm7/era5"  # Nick-- 2025.11.3: switched input-data strucutre,
+met_root_gswp3="/mnt/inputdata/atm/datm7/gswp3"
+met_root_era5="/mnt/inputdata/atm/datm7/era5"  # Nick-- 2025.11.3: switched input-data strucutre,
 # guess at correct behavior
 # met_root_era5="mnt/inputdata/atm/datm7/dapper" #  # this is previous path definition
+
+
+#add hook for different source mods
+# however-- 
+  # - gswp3 crashed when trying to use srcmods_gswp3v1 source mode
+  # - yet gswp3 completed when using the srcmods_era5cb/
+  # - so use srcmods_era5cb for both
+  
+if [ ${met_source} = era5 ]; then
+  src_mod_path="/home/modex_user/tools/OLMT/srcmods_era5cb/"
+elif [ ${met_source} = gswp3 ]; then
+  src_mod_path="/home/modex_user/tools/OLMT/srcmods_era5cb/"
+  # src_mod_path="/home/modex_user/tools/OLMT/srcmods_gswp3v1/"
+fi
+
 
 if [ ${site_name} = beo ]; then
   site_code="AK-BEOG"
@@ -332,9 +353,7 @@ elif [ ${site_name} = samoylov_island ]; then
   landuse_file="landuse.timeseries_1x1pt_SamoylovIsland-GRID_simyr1850-2015_c250306.nc"
   domain_file="domain.lnd.1x1pt_SamoylovIsland-GRID.nc"
   if [ ${met_source} = era5 ]; then
-    met_path="/mnt/inputdata/atm/datm7/era5/si"
     met_path="${met_root_era5}/si"
-    # met_path="/mnt/inputdata/atm/datm7/dapper/si"
   elif [ ${met_source} = gswp3 ]; then
     met_path="${met_root_gswp3}/si"
   fi
@@ -379,7 +398,7 @@ runcmd="python3 ./site_fullrun.py \
       --domainfile /mnt/inputdata/share/domains/domain.clm/${domain_file} \
       --surffile /mnt/inputdata/lnd/clm2/surfdata_map/${surf_file} \
       --landusefile /mnt/inputdata/lnd/clm2/surfdata_map/${landuse_file} \
-      --srcmods_loc /home/modex_user/tools/OLMT/srcmods_era5cb /
+      --srcmods_loc ${src_mod_path} /
       ${options} \
       & sleep 10"
 echo ${runcmd}
@@ -387,6 +406,14 @@ echo " "
 echo " "
 
 echo "**** Running OLMT: "
+
+# explicitly make the two output directories, 
+# else these will be placed in /E3SM/root
+mkdir -p /mnt/output/cime_case_dirs 
+mkdir -p /mnt/output/cime_run_dirs
+
+
+# added met source, so known
 if /opt/conda/bin/python ./site_fullrun.py \
       --site ${site_code} --sitegroup ${site_group} --caseidprefix ${case_prefix} \
       ${sim_years} --tstep ${timestep} --machine docker \
@@ -402,7 +429,7 @@ if /opt/conda/bin/python ./site_fullrun.py \
       --domainfile /mnt/inputdata/share/domains/domain.clm/${domain_file} \
       --surffile /mnt/inputdata/lnd/clm2/surfdata_map/${surf_file} \
       --landusefile /mnt/inputdata/lnd/clm2/surfdata_map/${landuse_file} \
-      --srcmods_loc /home/modex_user/tools/olmt/srcmods_era5cb \
+      --srcmods_loc ${src_mod_path} \
       ${options} \
       & sleep 10
 
