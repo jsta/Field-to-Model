@@ -233,10 +233,7 @@ echo " "
 # Set site codes for OLMT
 # EACH OF THESE SITES ALSO NEEDS THE SURFFILE, LU FILE, DOMAIN FILE SPECIFIED>
 met_root_gswp3="/mnt/inputdata/atm/datm7/gswp3"
-met_root_era5="/mnt/inputdata/atm/datm7/era5"  # Nick-- 2025.11.3: switched input-data strucutre,
-# guess at correct behavior
-# met_root_era5="mnt/inputdata/atm/datm7/dapper" #  # this is previous path definition
-
+met_root_era5="/mnt/inputdata/atm/datm7/era5"
 
 #add hook for different source mods
 # however-- 
@@ -248,9 +245,7 @@ if [ ${met_source} = era5 ]; then
   src_mod_path="/home/modex_user/tools/OLMT/srcmods_era5cb/"
 elif [ ${met_source} = gswp3 ]; then
   src_mod_path="/home/modex_user/tools/OLMT/srcmods_era5cb/"
-  # src_mod_path="/home/modex_user/tools/OLMT/srcmods_gswp3v1/"
 fi
-
 
 if [ ${site_name} = beo ]; then
   site_code="AK-BEOG"
@@ -278,27 +273,18 @@ elif [ ${site_name} = kougarok ]; then
   site_code="AK-K64G"
   surf_file="surfdata_1x1pt_kougarok-GRID_simyr1850_c360x720_c171002.nc"
   landuse_file="landuse.timeseries_1x1pt_kougarok-GRID_simyr1850-2015_c180423.nc"
-  domain_file="domain.lnd.1x1pt_kougarok-GRID_navy.nc"
-
-  ## was missing option for either met
-  # met_path="${met_root_era5}/kg"
-  # # met_path="/mnt/inputdata/atm/datm7/dapper/kg"
-  # replaced below
-  
+  domain_file="domain.lnd.1x1pt_kougarok-GRID_navy.nc"  
   if [ ${met_source} = era5 ]; then
-    # met_path="/mnt/inputdata/atm/datm7/dapper/cnl"
     met_path="${met_root_era5}/kg"
   elif [ ${met_source} = gswp3 ]; then
     met_path="${met_root_gswp3}/kg"
   fi
-
 elif [ ${site_name} = teller ]; then
   site_code="AK-TLG"
   surf_file="surfdata_1x1pt_teller-GRID_simyr1850_c360x720_c171002.nc"
   landuse_file="landuse.timeseries_1x1pt_teller-GRID_simyr1850-2015_c180423.nc"
   domain_file="domain.lnd.1x1pt_teller-GRID_navy.nc"
   if [ ${met_source} = era5 ]; then
-    # met_path="/mnt/inputdata/atm/datm7/dapper/tl"
     met_path="${met_root_era5}/tl"
   elif [ ${met_source} = gswp3 ]; then
     met_path="${met_root_gswp3}/tl"
@@ -309,7 +295,6 @@ elif [ ${site_name} = toolik_lake ]; then
   landuse_file="landuse.timeseries_1x1pt_ToolikLake-GRID_simyr1850-2015_c250306.nc"
   domain_file="domain.lnd.1x1pt_ToolikLake-GRID.nc"
   if [ ${met_source} = era5 ]; then
-    # met_path="/mnt/inputdata/atm/datm7/dapper/tfs"
     met_path="${met_root_era5}/tfs"
   elif [ ${met_source} = gswp3 ]; then
     met_path="${met_root_gswp3}/tfs"
@@ -321,7 +306,6 @@ elif [ ${site_name} = trail_valley_creek ]; then
   domain_file="domain.lnd.1x1pt_TrailValleyCreek-GRID.nc"
   if [ ${met_source} = era5 ]; then
     met_path="/mnt/inputdata/atm/datm7/era5/tvc"
-    # met_path="/mnt/inputdata/atm/datm7/dapper/tvc"
     met_path="${met_root_era5}/tvc"
   elif [ ${met_source} = gswp3 ]; then
     met_path="${met_root_gswp3}/tvc"
@@ -342,7 +326,6 @@ elif [ ${site_name} = bayelva ]; then
   landuse_file="landuse.timeseries_1x1pt_SJ-BlvBayelva-GRID_simyr1850-2015_c250306.nc"
   domain_file="domain.lnd.1x1pt_SJ-BlvBayelva-GRID.nc"
   if [ ${met_source} = era5 ]; then
-    # met_path="/mnt/inputdata/atm/datm7/dapper/bs"
     met_path="${met_root_era5}/bs"
   elif [ ${met_source} = gswp3 ]; then
     met_path="${met_root_gswp3}/bs"
@@ -411,7 +394,6 @@ echo "**** Running OLMT: "
 # else these will be placed in /E3SM/root
 mkdir -p /mnt/output/cime_case_dirs 
 mkdir -p /mnt/output/cime_run_dirs
-
 
 # added met source, so known
 if /opt/conda/bin/python ./site_fullrun.py \
