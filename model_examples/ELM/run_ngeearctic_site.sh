@@ -6,7 +6,7 @@
 # Phase 3 availible site names: kougarok, teller, council, beo
 # Phase 4 additional sites: Toolik_Lake, Abisko, Trail_Valley_Creek, Samoylov_Island, Bayelva
 # =======================================================================================
-
+set -euo pipefail
 # Print out options and help statements
 Help()
 {
@@ -27,7 +27,7 @@ Help()
     echo "  -ady, --ad_spinup_yrs     How many years of initial spinup using accelerated decomposition rates"
     echo "                              should be used? (Default: 200)"
     echo "  -fsy, --final_spinup_yrs  How many years should the second stage of spinup run (with normal"
-    echo "                              decomposition rates? (Default: 600)"
+    echo "                              decomposition rates)? (Default: 600)"
     echo "  -try, --transient_yrs     How many years should the transient stage of the sumulation run?"
     echo "                              (Default: -1, which corresponds to 1850-2014 for GSWP3 met data and"
     echo "                              1850-2024 for ERA5)"
@@ -157,6 +157,8 @@ ad_spinup_years="${ad_spinup_years:-200}"
 final_spinup_years="${final_spinup_years:-600}"
 transient_years="${transient_years:--1}"
 met_source="${met_source:-era5}"
+use_arctic_init="${use_arctic_init:-False}"
+options="${options:-}"
 # -1 is the default
 timestep="${timestep:-1}"
 # temp and co2 additions:
