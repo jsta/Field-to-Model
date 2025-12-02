@@ -44,7 +44,7 @@ Help()
 }
 
 cwd=$(pwd)
-cd /home/modex_user/tools/OLMT
+cd /home/modex_user/tools/olmt
 
 # =======================================================================================
 # Get the input options from the command line
@@ -241,9 +241,9 @@ met_root_era5="/mnt/inputdata/atm/datm7/era5"
   # - so use srcmods_era5cb for both
   
 if [ ${met_source} = era5 ]; then
-  src_mod_path="/home/modex_user/tools/OLMT/srcmods_era5cb/"
+  src_mod_path="/home/modex_user/tools/olmt/srcmods_era5cb/"
 elif [ ${met_source} = gswp3 ]; then
-  src_mod_path="/home/modex_user/tools/OLMT/srcmods_era5cb/"
+  src_mod_path="/home/modex_user/tools/olmt/srcmods_era5cb/"
 fi
 
 if [ ${site_name} = beo ]; then
