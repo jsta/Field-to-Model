@@ -1,6 +1,6 @@
 TEM Warming Experiment (and TEM Introduction)
 =================================================================
-
+.. include:: colors.rst
 What are we trying to model?
 -------------------------------------------------------------
 
@@ -34,6 +34,18 @@ Ely, Kim, Anderson, Jeremiah, Serbin, Shawn, & Rogers, Alistair (2024). Vegetati
 Setup
 -----
 
+
+
+
+
+
+
+
+
+Starting the container 
+************
+
+
 .. warning:: 
 
    Waiting on Tobey to finalize input data prep. For now, just use the 
@@ -42,8 +54,12 @@ Setup
 
 .. note:: Prerequisites
 
-   Assumes you have done the following container setup after downloading
-   the container image from the cloud:
+   Assuming you have done the following container setup after downloading
+   the container image from the cloud, you run the following command: :red:`test`
+
+
+
+
 
    .. code:: shell
 
@@ -62,12 +78,35 @@ Setup
       # --mount type=bind,src=$(pwd)/model_examples,dst=/home/modex_user/model_examples \
 
 
-   Which should give you a shell prompt inside the container with two
-   volumes mounted for input data and workshop runs.
+   Which should give you a shell prompt inside the so-called "container" with two
+   volumes mounted for input data and workshop runs. It should look like this: 
 
    .. code:: shell
 
       modex_user@5cf5a55dff62:~$
+
+   Unless otherwise specified, all following commands
+   should be run inside this container. You can run the :code:`ls` command to see mounted volumes:
+
+   .. code:: shell
+
+      modex_user@5cf5a55dff62:~$ ls
+      E3SM  inputdata  model_examples  output  tools
+
+   THIS INPUTDATA FOLDER IS NOT THE CORRECT ONE THOUGH, CORRECT? I THINK THIS IS CONFUSING? 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 Inputs
@@ -84,6 +123,20 @@ Copy the input data that you'd like to use to the input data directory:
 
    cp -r /opt/dvmdostem/demo-data/* /mnt/inputdata/
 
+
+You can now look at the available input daatasets in the :code:`/inputdata/` directory.
+
+.. code:: shell
+
+   modex_user@5cf5a55dff62:~$ ls /mnt/inputdata/
+   FILL WITH EXPECTED OUTPUT!
+
+These are the prepared input datasets for the TEM model. The following warming experiment 
+(and any other experiments) can be applied to any of these datasets - just make sure to adjust the 
+commands accordingly. For the purpose of this excercise we will focus on the Utqiagvik site, so the INSERT NAME 
+dataset will be used.
+
+:red:`THIS STEP SHOULD BE PRE-DONE AND UNNECESSARY/DELTED BEFORE THE WORKSHOP!`
 Next, to make the experiment and analysis easier, we will glue together the 
 historic and projected (scenario) climate data into a single continuous dataset.
 This will allow us to run the model in a single stage from 1901-2100 rather than
@@ -114,6 +167,14 @@ Now if you look in the new directory, you should see a new file called
 dataset. The file :code:`historic-climate.nc` is now the glued together version
 that covers 1901-2100. The same applies to the CO2 files.
 
+.. code:: shell
+
+   modex_user@09d39c83b7b9:~$ ls /mnt/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10/
+   co2.nc       fri-fire.nc          historic-explicit-fire.nc  original-vegetation.nc  projected-co2.nc            run-mask.nc      stock-co2.nc               topo.nc
+   drainage.nc  historic-climate.nc  notes.txt                  projected-climate.nc    projected-explicit-fire.nc  soil-texture.nc  stock-historic-climate.nc  vegetation.nc
+
+
+
 .. collapse:: Examining a NetCDF file.
    :class: workshop-collapse
    :name: ncdump-glued
@@ -127,6 +188,18 @@ that covers 1901-2100. The same applies to the CO2 files.
 
    This will show you the dimensions and variables in the file, including the
    time dimension which should now span from 1901 to 2100.
+   
+
+
+
+
+
+
+
+
+
+
+
 
 Creating the Warming Treatment Dataset
 **********************************************
@@ -141,6 +214,8 @@ for the year 2019.
    cp -r /mnt/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10 \
      /mnt/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019
 
+(:red:`NOTE: I think we should simplify the folder names. Both for the input data and the altered treatment 
+folders. This will also make it easier to replace with other examples for participants.`)
 Now we will run the helper script to modify the air temperatures in the new
 dataset:
 
@@ -166,7 +241,7 @@ dataset:
    years and different months as needed. See the help message for details.
 
 As you will see in the statements that are printed out from this script it will 
-actually create an new file alongside the existing one. Here we throw out the 
+actually create an new file (:code:`modified_historic-climate.nc`) alongside the existing one (:code:`historic-climate.nc`). Here we throw out the 
 original file and rename the modified version to clean things up.
 
 .. code:: shell
@@ -179,16 +254,38 @@ Now we have two datasets:
 * the control dataset: :code:`/mnt/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10`
 * the warming treatment dataset: :code:`/mnt/inputdata/cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10_warming_2.6C_JJAS_2019`
 
+You can confirm this by listing the contents of the inputdata folder. It should look like this:
+
+.. code:: shell
+
+   modex_user@09d39c83b7b9:~$ ls /mnt/inputdata/
+   cru-ts40_ar5_rcp85_ncar-ccsm4_toolik_field_station_10x10  treatment_temperature
+
 .. note:: TODO
 
    would be nice to show some viz of this...do we need to use the other container??
+   :red:`I think this may be to much effort for what it's worth`
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Setting up the run folders
 **********************************************
 
 Now that we have the datasets set up, we can create two run folders using the 
-:code:`pyddt-swd` utility helper tool. For this we will work in the 
-:code:`/mnt/output/tem_ee1_warming` directory.
+:code:`pyddt-swd` utility helper tool. These runfolders will contain the necessary
+files and configurations for running the model, as well as the outputs that are created. 
+For this we will create a new folder in the :code:`/mnt/output/` directory and switch into it:
 
 .. code:: shell
 
@@ -205,25 +302,37 @@ Now that we have the datasets set up, we can create two run folders using the
 
 You should now have two run folders set up for the control and treatment runs:
 
+
 .. code:: shell
 
    $ pwd
-   /mnt/output/tem/tem_ee1_warming/control
+   /mnt/output/tem/tem_ee1_warming
 
    $ ls -l
    drwxr-xr-x 6 modex_user modex_user 4096 Oct 20 22:17 control
    drwxr-xr-x 6 modex_user modex_user 4096 Oct 20 22:17 warming_2.6C_JJAS_2019   
 
-Now we can start a run in each folder.
+
+:red:`the above code is useful, but pdw and ls -l are not entirely necessary and may be confusing. 
+Suggest going with ls as shown below as to not introduce more commands than necessary`
+
+.. code:: shell
+
+   modex_user@09d39c83b7b9:/mnt/output/tem/tem_ee1_warming$ ls
+   control  treatment
+
+
+Now that we have runfolders that point towards the input datsets we created and selected, we can start a run in each folder.
 
 Running the model
 **********************************************
 
-Take care of the last setup steps. **DO THIS FOR EACH RUN**:
+There are a few more setup steps that need to be done before starting a run - these need to be executed for **EACH RUNFOLDER**:
 
 #. Change into the run folder, e.g. :code:`cd /mnt/output/tem/tem_ee1_warming/control`.
 
-#. Adjust the run mask so that only a single pixel is enabled.
+#. Adjust the run mask so that only a single pixel is enabled. :red:`I think we should have the input datasets pre-prepared 
+   with single pixel run masks to avoid this step? I will need to adjust the plotting scripts then too. If we don't have time for both, stitching beforehand is more important though`
 
    .. code::
 
@@ -232,7 +341,8 @@ Take care of the last setup steps. **DO THIS FOR EACH RUN**:
 #. Setup the output specification file. This is a `:code:`csv` file that tells 
    the model which variables to output and at what resolution. You can edit it 
    by hand but it's easier to use the :code:`pyddt-outspec` utility to add the
-   variables you want. 
+   variables you want. There are many variables to choose from - for this example, 
+   we will output GPP, LAYERDZ (layer thickness), and TLAYER (temperature by layer).
 
    .. code::
 
@@ -284,7 +394,7 @@ Take care of the last setup steps. **DO THIS FOR EACH RUN**:
             ...:    json.dump(jd, f, indent=4)
 
 
-#. Now we can start the run.
+#. Now we can start the run. 
 
    .. code:: shell
 
