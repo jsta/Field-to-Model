@@ -45,7 +45,6 @@ instructions, run the following command to start a shell in the model container:
 .. code:: shell
 
    docker run -it --rm \
-      -p 9000:9000 \ 
       -v $(pwd):/home/modex_user \
       -v inputdata:/mnt/inputdata \ 
       -v output:/mnt/output \
@@ -435,7 +434,81 @@ There are a few more setup steps that need to be done before starting a run - th
 Analysis
 ----------------------------
 
-.. note:: TODO, write this...
+For the analysis portion of this experiment, we will use a Jupyter Notebook to 
+visualize and compare the outputs from the control and warming runs. This allows
+us to interactively explore the data and create plots to see how the warming
+treatment affected the soil temperatures.
+
+To start this notebook, use another terminal to launch a Jupyter Notebook server
+in a new container:
+
+.. warning:: :red:`TODO`
+
+   Until we can get Jupyter installed in the container image,  we need to do
+   this in two steps!! Once installed in the container, you can do this in 
+   a single step, i.e. ``docker run ... jupyter notebook ...`` as shown below.
+
+   Get a shell to the container as above:
+
+   .. code:: shell
+
+      docker run -it --rm \
+         -p 8888:8888 \
+         -v $(pwd):/home/modex_user \
+         -v inputdata:/mnt/inputdata \ 
+         -v output:/mnt/output \
+         yuanfornl/ngee-arctic-modex25:models-main-latest /bin/bash
+
+   Then, once inside the container, install Jupyter so it is available:
+
+   .. code:: shell
+
+      # you could use conda or pip here too...
+      mamba install -y jupyter ipython
+
+   Then you can start the notebook server:
+
+   .. code:: shell
+
+      jupyter notebook --ip=0.0.0.0 --no-browser --port 8888
+
+   .. note:: 
+      
+      You have to re-install Jupyter each time you start a new container until we
+      get it baked into the image.
+
+.. code:: shell
+
+   docker run -it --rm \
+      -p 8888:8888 \
+      -v $(pwd):/home/modex_user \
+      -v inputdata:/mnt/inputdata \ 
+      -v output:/mnt/output \
+      yuanfornl/ngee-arctic-modex25:models-main-latest \
+      jupyter notebook --ip=0.0.0.0 --no-browser --port 8888   
+
+You should see output like this:
+
+.. code:: python
+
+   [I 2025-12-12 21:31:22.299 ServerApp] jupyter_lsp | extension was successfully linked.
+   [I 2025-12-12 21:31:22.305 ServerApp] jupyter_server_terminals | extension was successfully linked.
+   [I 2025-12-12 21:31:22.311 ServerApp] jupyterlab | extension was successfully linked.
+   [I 2025-12-12 21:31:22.317 ServerApp] notebook | extension was successfully linked.
+   ...
+       To access the server, open this file in a browser:
+        file:///home/modex_user/.local/share/jupyter/runtime/jpserver-360-open.html
+    Or copy and paste one of these URLs:
+        http://2aecc7b15434:8888/tree?token=e66b3be47f2b3d7721adeb88992b8b1818901c5d76281678
+        http://127.0.0.1:8888/tree?token=e66b3be47f2b3d7721adeb88992b8b1818901c5d76281678
+
+Once the server is running, you should see a URL printed out in the terminal
+that you can open in your web browser on your host computer to access the
+Jupyter interface. Navigate to the :code:`model_examples/TEM/` directory and
+open the :code:`temperature_plotting.ipynb` notebook.
+
+
+.. note:: :red:`TODO make sure all this is in the notebook...`
 
    What kinds of plots and analyses do we want to provide? What variables are we
    most interested in? How do we want to visualize the differences between the
@@ -448,5 +521,3 @@ Analysis
    * Difference maps if multi-pixel
    * Statistical summaries (means, variances, trends)
    * Comparison to observational data if available
-
-   We can use Jupyter notebooks for interactive analysis and visualization.   
