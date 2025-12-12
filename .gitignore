@@ -12,6 +12,7 @@ build
 .viminfo
 .wget-hsts
 .vim
+.cache
 .DS_Store
 */.DS_Store
 
