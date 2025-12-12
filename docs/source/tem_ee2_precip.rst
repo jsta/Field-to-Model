@@ -1,4 +1,4 @@
-TEM Precipitation Experiment (Hydrology/snow/vegetation interactions breakout group)
+Hydro/snow/veg interaction breakout group TEM Precipitation Experiment
 =====================================================================================
 
 
