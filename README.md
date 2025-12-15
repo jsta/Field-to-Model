@@ -17,9 +17,11 @@ More information can be found [here](https://github.com/NGEE-Arctic/Field-to-Mod
 - Workshop Agenda
 - [Workshop Setup Instructions](https://ngee-arctic.github.io/Field-to-Model/setup.html)
 - More information about ELM
+    - 
 - More information about TEM
 - More information about ATS
-- Breakout groups
+    - [Develoment repository](https://github.com/amanzi/ats)
+- Breakout groups:
     - Permafrost Hydrology
     - Snow/Vegetation/Permafrost Interactions
     - Hillslope Hydrology impacts on Biogeochemistry
