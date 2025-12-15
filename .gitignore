@@ -2,6 +2,7 @@
 # The sphinx build directory
 docs/build/**
 build
+
 # ignore some things produced in the container
 */.bash_history
 */.gitconfig
@@ -14,6 +15,8 @@ build
 .vim
 .DS_Store
 */.DS_Store
+.subversion
+.python_history
 
 # local testing artifacts
 logs/
