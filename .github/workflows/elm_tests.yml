@@ -11,7 +11,7 @@ jobs:
 
         strategy:
             matrix:
-                site_name: [kougarok, teller, council, beo, toolik_lake, trail_valley_creek, abisko, bayelva, samoylov_island]
+                site_name: [kougarok, teller, council, beo, toolik_lake, trail_valley_creek, abisko, samoylov_island]
 
         steps:
             - name: Checkout repo
