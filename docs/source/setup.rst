@@ -23,6 +23,9 @@ Clone Field-to-Model repository for the workshop
     git clone --recurse-submodules https://github.com/ngee-arctic/field-to-model
     cd field-to-model
 
+This step downloads all of the scripts and infrastructure we have developed for the workshop,
+it should take a couple minutes to complete.
+
 Download Docker containers
 ----------------------------
 
@@ -93,7 +96,10 @@ If you get output that matches the output below, you've setup the container corr
     Docker	E3SM  README.md  docs  model_examples  tools
     inputdata  output
 
-Please take a moment to 
+Please take a moment to report if you were able to successfully get to this stage, or 
+post any issues you are having here: https://github.com/NGEE-Arctic/Field-to-Model/issues/38
+and we will try to have someone from the organizing team help you out before the workshop!
+
 
 Launch the containers
 ----------------------------
