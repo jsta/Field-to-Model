@@ -18,11 +18,13 @@ can be pulled from Docker Hub.
 Required software:
 --------------------------
 
-You will need **one from each** of the following categories:
+You will need the following software:
 
 * Docker Desktop - though note you may need an institutional license.
-* a 3D visualization tool: one of ParaView or VisIt.  VisIt is a little more intuitive to new users if you have never used either one and is sufficient for 90% of what we will do; ParaView is preferred for viewing complex 3D meshes.
 * git
+
+Optionally, you will need a 3D visualization tool: one of ParaView or VisIt.  VisIt is a little more intuitive to new users if you have never used either one and is sufficient for 90% of what we will do; ParaView is preferred for viewing complex 3D meshes.
+This will be most useful for the ATS section of this Workshop.
   
 Docker
 ^^^^^^
@@ -41,7 +43,7 @@ Docker
     * Verify install using ``wsl --list``. You should see something like "Ubuntu".
     * Set default WSL ``wsl --set-default-version 2``
 
-.. admonition:: OSX
+.. admonition:: macOS
 
     Download and install the .dmg file for your silicon type, whether Intel (older) or Apple (M1 and newer).
 
@@ -52,7 +54,7 @@ Docker
 .. seealso::
 
     * `WSL Installation <https://docs.microsoft.com/en-us/windows/wsl/install-win10#step-4---download-the-linux-kernel-update-package>`_
-    * `WSL Troublshooting Guide <https://learn.microsoft.com/en-us/windows/wsl/troubleshooting#installation-issues>`_
+    * `WSL Troubleshooting Guide <https://learn.microsoft.com/en-us/windows/wsl/troubleshooting#installation-issues>`_
 
 Git
 ^^^
