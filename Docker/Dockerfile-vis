@@ -9,6 +9,9 @@ FROM quay.io/jupyter/scipy-notebook:lab-4.4.9
 
 # install Python packages you often use
 RUN set -ex \
+   && conda config --remove-key channels \
+   && conda config --add channels conda-forge \
+   && conda config --set channel_priority strict \
    && conda install --quiet --yes -c conda-forge \
    # choose the Python packages you need
    'matplotlib'
