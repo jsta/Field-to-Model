@@ -11,14 +11,7 @@ FROM quay.io/jupyter/scipy-notebook:lab-4.4.9
 RUN set -ex \
    && conda install --quiet --yes -c conda-forge \
    # choose the Python packages you need
-   'matplotlib' \
-   'plotly' \
-   'folium' \
-   'dask' \
-   'pandas' \
-   'xarray' \
-   'geopandas' \
-   'ipyleaflet' \
+   'matplotlib'
    && conda clean --all -f -y \
    && conda install --quiet --yes -c conda-forge \
    'nc-time-axis' \
