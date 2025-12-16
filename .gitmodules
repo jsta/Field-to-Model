@@ -1,10 +1,10 @@
 [submodule "E3SM"]
 	path = E3SM
-	url = git@github.com:lanl/NGEE-Arctic-E3SM
+	url = https://github.com/lanl/NGEE-Arctic-E3SM
 [submodule "tools/dapper"]
 	path = tools/dapper
-	url = git@github.com:ngee-arctic/dapper
+	url = https://github.com/ngee-arctic/dapper
 [submodule "tools/olmt"]
 	path = tools/olmt
-	url = git@github.com:rfiorella/olmt
+	url = https://github.com/rfiorella/olmt
 	branch = rfiorella/era5
