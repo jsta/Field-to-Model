@@ -10,17 +10,17 @@ and facilitate a better understanding of model capabilities, approaches, and lim
 
 ## Key Links:
 
-[!NOTE]
-It is highly recommended that you download the workshop containers and input data ahead of time.
-More information can be found [here](https://github.com/NGEE-Arctic/Field-to-Model/issues/38)
+> [!NOTE]
+> It is highly recommended that you download the workshop containers and input data ahead of time.
+> More information can be found [here](https://github.com/NGEE-Arctic/Field-to-Model/issues/38)
 
-- Workshop Agenda
+- [Workshop Agenda](https://ngee-arctic.github.io/Field-to-Model/modex_agenda_2025.html)
 - [Workshop Setup Instructions](https://ngee-arctic.github.io/Field-to-Model/setup.html)
 - More information about ELM
     - 
 - More information about TEM
 - More information about ATS
-    - [Develoment repository](https://github.com/amanzi/ats)
+    - [Development repository](https://github.com/amanzi/ats)
 - Breakout groups:
     - Permafrost Hydrology
     - Snow/Vegetation/Permafrost Interactions
