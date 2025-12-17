@@ -21,9 +21,13 @@ Help()
     echo "                              workshop this will always be NGEE-Arctic"
     echo "  --case_prefix             What should be appended to the beginning of the casename to distinguish"
     echo "                              between two runs at the same site?"
-    echo "  --met_source              Select which meteorological forcing you would like to use. ERA5 or GSWP3 (Default: ERA5)"
+    echo "  -ms, --met_source         Select which meteorological forcing you would like to use. ERA5 or GSWP3 (Default: ERA5)"
     echo "  --use_arctic_init         Use modified startup condition for Arctic conditions. (ELM default is soil moisture of 0.15 m3/m3"
     echo "                            and 274K. Modified condition is at liquid saturation and at 250+40*cos(lat) K)"
+    echo "  --use_IM2_hillslope_hydrology  Turn on transfer of water from high elevation topounits to low elevation."
+    echo "                                 (Requires surffile with topounits > 1 to see an impact)"
+    echo "  --use_polygonal_tundra    Turn on polygonal tundra parameterizations affecting runoff, depression storage, and inundation fraction"
+    echo "                            (Requires surface file with polygonal tundra type area fractions specified)"
     echo "  -ady, --ad_spinup_yrs     How many years of initial spinup using accelerated decomposition rates"
     echo "                              should be used? (Default: 200)"
     echo "  -fsy, --final_spinup_yrs  How many years should the second stage of spinup run (with normal"
@@ -38,7 +42,19 @@ Help()
     echo "  --startdate_add_temperature   When should the temperature perturbation be initiated?"
     echo "                                (It will continue to the end of the run). YYYYMMDD format"
     echo "  --add_co2                 Add a constant value of CO2 to the CO2 forcing data stream (in ppm)"
+    echo "                            NOTE: in this mode, CO2 has no impact on temperature since temperature is provided as an input time series"
+    echo "                            This switch only affects plant physiology"
     echo "  --startdate_add_co2       When should the CO2 perturbation be initiated? (Will continue to end of run), YYYYMMDD format"
+    echo "  --scale_rain              Scaling factor to apply to rainfall in atmospheric forcing"
+    echo "  --startdate_scale_rain    When should the rainfall scaling begin? (It will continue to the end of the run), YYYYMMDD format"
+    echo "  --scale_snow              Scaling factor to apply to snowfall in atmosopheric forcing"
+    echo "  --startdate_scale_snow    When should the snowfall scaling begin? (It will continue to the end of the transient run), YYYYMMDD format"
+    echo "  --scale_ndep              Scaling factor to apply to nitrogen deposition in the atmospheric forcing"
+    echo "  --startdate_scale_ndep    When should the nitrogen deposition scaling begin? (It will continue to the end of the transient run)"
+    echo "                            YYYYMMDD format"
+    echo "  --scale_pdep              Scaling factor to apply to phosphorus deposition in the atmospheric forcing"
+    echo "  --startdate_scale_pdep    When should the phosphorus deposition scaling begin? (It will continue to the end of the transient run)"
+    echo "                            YYYYMMDD format"
     echo "  --mod_parm_file           Use a modified PFT parameter file (Note, requires full path)"
     exit 0
 }
@@ -139,6 +155,14 @@ case $i in
     --use_arctic_init)
     use_arctic_init=True
     shift
+    ;;   
+    --use_IM2_hillslope_hydrology)
+    use_IM2_hillslope_hydrology=True
+    shift
+    ;;    
+    --use_polygonal_tundra)
+    use_polygonal_tundra=True
+    shift
     ;;
     *)
         # unknown option
@@ -158,6 +182,8 @@ final_spinup_years="${final_spinup_years:-600}"
 transient_years="${transient_years:--1}"
 met_source="${met_source:-era5}"
 use_arctic_init="${use_arctic_init:-False}"
+use_IM2_hillslope_hydrology="${use_IM2_hillslope_hydrology:-False}"
+use_polygonal_tundra="${use_polygonal_tundra:-False}"
 options="${options:-}"
 # -1 is the default
 timestep="${timestep:-1}"
@@ -176,7 +202,6 @@ scale_ndep="${scale_ndep:-1.0}"
 startdate_scale_ndep="${startdate_scale_ndep:-99991231}"
 scale_pdep="${scale_pdep:-1.0}"
 startdate_scale_pdep="${startdate_scale_pdep:-99991231}"
-
 
 #enforce met naming in prefix
 case_prefix=${case_prefix}_${met_source}
@@ -222,10 +247,18 @@ if [ ${transient_years} != -1 ]; then
 else
   sim_years="--nyears_ad_spinup ${ad_spinup_years} --nyears_final_spinup ${final_spinup_years}"
 fi
-if [ "${use_arctic_init}" == True ]; then
+if [ "${use_arctic_init}" = True ]; then
   echo "Using wetter, colder initialization conditions for Arctic runs"
   options="$options --use_arctic_init"
 fi
+if [ "${use_IM2_hillslope_hydrology}" = True ]; then
+  echo "Turning on hillslope hydrology from high-elevation topounits to low-elevation topounits"
+  options="$options --use_IM2_hillslope_hydrology"
+fi
+if [ "${use_polygonal_tundra}" = True ]; then
+  echo "Turning on polygonal tundra parameterizations"
+  options="$options --use_polygonal_tundra"
+fi 
 echo " "
 # =======================================================================================
 
@@ -233,19 +266,16 @@ echo " "
 # specify met dir prefix
 # Set site codes for OLMT
 # EACH OF THESE SITES ALSO NEEDS THE SURFFILE, LU FILE, DOMAIN FILE SPECIFIED>
-met_root_gswp3="/mnt/inputdata/atm/datm7/gswp3"
-met_root_era5="/mnt/inputdata/atm/datm7/era5"
-
 #add hook for different source mods
 # however-- 
   # - gswp3 crashed when trying to use srcmods_gswp3v1 source mode
   # - yet gswp3 completed when using the srcmods_era5cb/
-  # - so use srcmods_era5cb for both
-  
+  # - so use srcmods_era5cb for both  
+src_mod_path="/home/modex_user/tools/olmt/srcmods_modexws/"
 if [ ${met_source} = era5 ]; then
-  src_mod_path="/home/modex_user/tools/olmt/srcmods_era5cb/"
+  met_root="/mnt/inputdata/atm/datm7/era5"
 elif [ ${met_source} = gswp3 ]; then
-  src_mod_path="/home/modex_user/tools/olmt/srcmods_era5cb/"
+  met_root="/mnt/inputdata/atm/datm7/gswp3"
 fi
 
 if [ ${site_name} = beo ]; then
@@ -253,99 +283,80 @@ if [ ${site_name} = beo ]; then
   surf_file="surfdata_1x1pt_beo-GRID_simyr1850_c360x720_c171002.nc"
   landuse_file="landuse.timeseries_1x1pt_beo-GRID_simyr1850-2015_c180423.nc"
   domain_file="domain.lnd.1x1pt_beo-GRID_navy.nc"
-  if [ ${met_source} = era5 ]; then
-    met_path="${met_root_era5}/utq"
-  elif [ ${met_source} = gswp3 ]; then
-    met_path="${met_root_gswp3}/utq"
-  fi
+  met_path="${met_root}/utq"
 elif [ ${site_name} = council ]; then
   site_code="AK-CLG"
   surf_file="surfdata_1x1pt_council-GRID_simyr1850_c360x720_c171002.nc"
   landuse_file="landuse.timeseries_1x1pt_council-GRID_simyr1850-2015_c180423.nc"
   domain_file="domain.lnd.1x1pt_council-GRID_navy.nc"
-  if [ ${met_source} = era5 ]; then
-    met_path="${met_root_era5}/cnl"
-  elif [ ${met_source} = gswp3 ]; then
-    met_path="${met_root_gswp3}/cnl"
-  fi
-
+  met_path="${met_root}/cnl"
 elif [ ${site_name} = kougarok ]; then
   site_code="AK-K64G"
   surf_file="surfdata_1x1pt_kougarok-GRID_simyr1850_c360x720_c171002.nc"
   landuse_file="landuse.timeseries_1x1pt_kougarok-GRID_simyr1850-2015_c180423.nc"
   domain_file="domain.lnd.1x1pt_kougarok-GRID_navy.nc"  
-  if [ ${met_source} = era5 ]; then
-    met_path="${met_root_era5}/kg"
-  elif [ ${met_source} = gswp3 ]; then
-    met_path="${met_root_gswp3}/kg"
-  fi
+  met_path="${met_root}/kg"
 elif [ ${site_name} = teller ]; then
   site_code="AK-TLG"
   surf_file="surfdata_1x1pt_teller-GRID_simyr1850_c360x720_c171002.nc"
   landuse_file="landuse.timeseries_1x1pt_teller-GRID_simyr1850-2015_c180423.nc"
   domain_file="domain.lnd.1x1pt_teller-GRID_navy.nc"
-  if [ ${met_source} = era5 ]; then
-    met_path="${met_root_era5}/tl"
-  elif [ ${met_source} = gswp3 ]; then
-    met_path="${met_root_gswp3}/tl"
-  fi
+  met_path="${met_root}/tl"
 elif [ ${site_name} = toolik_lake ]; then
   site_code="AK-Tlk"
   surf_file="surfdata_1x1pt_ToolikLake-GRID_simyr1850_c360x720_c250306.nc"
   landuse_file="landuse.timeseries_1x1pt_ToolikLake-GRID_simyr1850-2015_c250306.nc"
   domain_file="domain.lnd.1x1pt_ToolikLake-GRID.nc"
-  if [ ${met_source} = era5 ]; then
-    met_path="${met_root_era5}/tfs"
-  elif [ ${met_source} = gswp3 ]; then
-    met_path="${met_root_gswp3}/tfs"
-  fi
+  met_path="${met_root}/tfs"
 elif [ ${site_name} = trail_valley_creek ]; then
   site_code="CA-TVC"
   surf_file="surfdata_1x1pt_TrailValleyCreek-GRID_simyr1850_c360x720_c250306.nc"
   landuse_file="landuse.timeseries_1x1pt_TrailValleyCreek-GRID_simyr1850-2015_c250306.nc"
   domain_file="domain.lnd.1x1pt_TrailValleyCreek-GRID.nc"
-  if [ ${met_source} = era5 ]; then
-    met_path="/mnt/inputdata/atm/datm7/era5/tvc"
-    met_path="${met_root_era5}/tvc"
-  elif [ ${met_source} = gswp3 ]; then
-    met_path="${met_root_gswp3}/tvc"
-  fi
+  met_path="${met_root}/tvc"
 elif [ ${site_name} = abisko ]; then
   site_code="SE-Abi"
   surf_file="surfdata_1x1pt_Abisko-GRID_simyr1850_c360x720_c250306.nc"
   landuse_file="landuse.timeseries_1x1pt_Abisko-GRID_simyr1850-2015_c250306.nc"
   domain_file="domain.lnd.1x1pt_Abisko-GRID.nc"
-  if [ ${met_source} = era5 ]; then
-    met_path="${met_root_era5}/abs"
-  elif [ ${met_source} = gswp3 ]; then
-    met_path="${met_root_gswp3}/abs"
-  fi
+  met_path="${met_root}/abs"
 elif [ ${site_name} = bayelva ]; then
   site_code="NO-SJB"
   surf_file="surfdata_1x1pt_SJ-BlvBayelva-GRID_simyr1850_c360x720_c250306.nc"
   landuse_file="landuse.timeseries_1x1pt_SJ-BlvBayelva-GRID_simyr1850-2015_c250306.nc"
   domain_file="domain.lnd.1x1pt_SJ-BlvBayelva-GRID.nc"
-  if [ ${met_source} = era5 ]; then
-    met_path="${met_root_era5}/bs"
-  elif [ ${met_source} = gswp3 ]; then
-    met_path="${met_root_gswp3}/bs"
-  fi
+  met_path="${met_root}/bs"
 elif [ ${site_name} = samoylov_island ]; then
   site_code="RU-Sam"
   surf_file="surfdata_1x1pt_SamoylovIsland-GRID_simyr1850_c360x720_c250306.nc"
   landuse_file="landuse.timeseries_1x1pt_SamoylovIsland-GRID_simyr1850-2015_c250306.nc"
   domain_file="domain.lnd.1x1pt_SamoylovIsland-GRID.nc"
+  met_path="${met_root}/si"
+elif [ ${site_name} = upper_kuparuk ]; then
+  site_code="AK-UPK"
+  surf_file="surfdata_1x1pt_UpperKuparuk-GRID_simyr1850_c360x720_c250609.nc"
+  landuse_file="landuse.timeseries_1x1pt_UpperKuparuk-GRID_simyr1850-2015_c250609.nc"
+  domain_file="domain.lnd.1x1pt_UpperKuparuk-GRID.nc"
   if [ ${met_source} = era5 ]; then
-    met_path="${met_root_era5}/si"
+    met_path="${met_root}/UpK_wshed"
   elif [ ${met_source} = gswp3 ]; then
-    met_path="${met_root_gswp3}/si"
-  fi
-
+    met_path="${met_root}/tfs" # use same site data as toolik
+  fi   
+elif [ ${site_name} = imnaviat_creek ]; then
+  site_code="AK-IMC"
+  surf_file="surfdata_1x1pt_ImnaviatCreek-GRID_simyr1850_c360x720_c250609.nc"
+  landuse_file="landuse.timeseries_1x1pt_ImnaviatCreek-GRID_simyr1850-2015_c250609.nc"
+  domain_file="domain.lnd.1x1pt_ImnaviatCreek-GRID.nc"
+  if [ ${met_source} = era5 ]; then
+    met_path="${met_root}/ImC_wshed"
+  elif [ ${met_source} = gswp3 ]; then
+    met_path="${met_root}/tfs" # use same site data as toolik
+  fi  
 else 
   echo " "
   echo "**** EXECUTION HALTED ****"
   echo "Please select a Site Name from:"
-  echo "ALASKA: beo, council, kougarok, teller, toolik_lake"
+  echo "ALASKA: beo, council, kougarok, teller, toolik_lake, imnaviat_creek, upper_kuparuk"
   echo "CANADA: trail_valley_creek"
   echo "SWEDEN: abisko"
   echo "NORWAY/SVALBARD: bayelva" 
@@ -396,7 +407,7 @@ mkdir -p /mnt/output/cime_case_dirs
 mkdir -p /mnt/output/cime_run_dirs
 
 # added met source, so known
-if /opt/conda/bin/python ./site_fullrun.py \
+if /opt/conda/bin/python -u -X dev ./site_fullrun.py \
       --site ${site_code} --sitegroup ${site_group} --caseidprefix ${case_prefix} \
       ${sim_years} --tstep ${timestep} --machine docker \
       --compiler gnu --mpilib openmpi \
