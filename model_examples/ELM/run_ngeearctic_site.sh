@@ -247,15 +247,15 @@ if [ ${transient_years} != -1 ]; then
 else
   sim_years="--nyears_ad_spinup ${ad_spinup_years} --nyears_final_spinup ${final_spinup_years}"
 fi
-if [ "${use_arctic_init}" == True ]; then
+if [ "${use_arctic_init}" = True ]; then
   echo "Using wetter, colder initialization conditions for Arctic runs"
   options="$options --use_arctic_init"
 fi
-if [ "${use_IM2_hillslope_hydrology}" == True ]; then
+if [ "${use_IM2_hillslope_hydrology}" = True ]; then
   echo "Turning on hillslope hydrology from high-elevation topounits to low-elevation topounits"
   options="$options --use_IM2_hillslope_hydrology"
 fi
-if [ "${use_polygonal_tundra}" == True ]; then
+if [ "${use_polygonal_tundra}" = True ]; then
   echo "Turning on polygonal tundra parameterizations"
   options="$options --use_polygonal_tundra"
 fi 
@@ -334,7 +334,7 @@ elif [ ${site_name} = samoylov_island ]; then
   domain_file="domain.lnd.1x1pt_SamoylovIsland-GRID.nc"
   met_path="${met_root}/si"
 elif [ ${site_name} = upper_kuparuk ]; then
-  site_code="AK-Tlk"
+  site_code="AK-UPK"
   surf_file="surfdata_1x1pt_UpperKuparuk-GRID_simyr1850_c360x720_c250609.nc"
   landuse_file="landuse.timeseries_1x1pt_UpperKuparuk-GRID_simyr1850-2015_c250609.nc"
   domain_file="domain.lnd.1x1pt_UpperKuparuk-GRID.nc"
@@ -344,7 +344,7 @@ elif [ ${site_name} = upper_kuparuk ]; then
     met_path="${met_root}/tfs" # use same site data as toolik
   fi   
 elif [ ${site_name} = imnaviat_creek ]; then
-  site_code="AK-Tlk"
+  site_code="AK-IMC"
   surf_file="surfdata_1x1pt_ImnaviatCreek-GRID_simyr1850_c360x720_c250609.nc"
   landuse_file="landuse.timeseries_1x1pt_ImnaviatCreek-GRID_simyr1850-2015_c250609.nc"
   domain_file="domain.lnd.1x1pt_ImnaviatCreek-GRID.nc"
