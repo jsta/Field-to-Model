@@ -271,11 +271,10 @@ echo " "
   # - gswp3 crashed when trying to use srcmods_gswp3v1 source mode
   # - yet gswp3 completed when using the srcmods_era5cb/
   # - so use srcmods_era5cb for both  
+src_mod_path="/home/modex_user/tools/olmt/srcmods_modexws/"
 if [ ${met_source} = era5 ]; then
-  src_mod_path="/home/modex_user/tools/olmt/srcmods_era5cb/"
   met_root="/mnt/inputdata/atm/datm7/era5"
 elif [ ${met_source} = gswp3 ]; then
-  src_mod_path="/home/modex_user/tools/olmt/srcmods_era5cb/"
   met_root="/mnt/inputdata/atm/datm7/gswp3"
 fi
 
@@ -408,7 +407,7 @@ mkdir -p /mnt/output/cime_case_dirs
 mkdir -p /mnt/output/cime_run_dirs
 
 # added met source, so known
-if /opt/conda/bin/python ./site_fullrun.py \
+if /opt/conda/bin/python -u -X dev ./site_fullrun.py \
       --site ${site_code} --sitegroup ${site_group} --caseidprefix ${case_prefix} \
       ${sim_years} --tstep ${timestep} --machine docker \
       --compiler gnu --mpilib openmpi \
