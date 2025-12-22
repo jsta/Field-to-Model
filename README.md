@@ -1,6 +1,6 @@
 # 2nd NGEE Arctic Field-to-Model Workshop
 
-<img src=".assets/NGEE Arctic logo_large (002).png" align="left", width ="300">
+<img src=".assets/NGEE Arctic logo_large (002).png" align="left" width="300">
 
 Welcome to the 2nd NGEE Arctic Field-to-Model Workshop! In this two and a half day workshop,
 we hope to introduce the basics of several different models used across the project, with 
