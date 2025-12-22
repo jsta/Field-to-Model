@@ -1,6 +1,6 @@
 # 2nd NGEE Arctic Field-to-Model Workshop
 
-### add header image?
+<img src=".assets/NGEE Arctic logo_large (002).png" align="left", width ="300">
 
 Welcome to the 2nd NGEE Arctic Field-to-Model Workshop! In this two and a half day workshop,
 we hope to introduce the basics of several different models used across the project, with 
@@ -17,14 +17,22 @@ and facilitate a better understanding of model capabilities, approaches, and lim
 - [Workshop Agenda](https://ngee-arctic.github.io/Field-to-Model/modex_agenda_2025.html)
 - [Workshop Setup Instructions](https://ngee-arctic.github.io/Field-to-Model/setup.html)
 - More information about ELM
-    - 
+    - [E3SM's ELM Documentation](https://docs.e3sm.org/E3SM/ELM) (note: this is under development)
+    - [CLM 4.5 Technical Note]
+    - [Development repository](https://github.com/E3SM-Project/E3SM/tree/master/components/elm)
 - More information about TEM
+    - [DVM-DOS-TEM documentation](http://uaf-arctic-eco-modeling.github.io/dvm-dos-tem/)
+    - [Development repository](https://github.com/uaf-arctic-eco-modeling/dvm-dos-tem)
 - More information about ATS
+    - [Amanzi-ATS documentation](https://amanzi.github.io)
     - [Development repository](https://github.com/amanzi/ats)
+- More information about ILAMB
 - Breakout groups:
     - Permafrost Hydrology
     - Snow/Vegetation/Permafrost Interactions
     - Hillslope Hydrology impacts on Biogeochemistry
+
+## Additional resources
 
 
 ### Known issues:
