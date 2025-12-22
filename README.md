@@ -33,7 +33,7 @@ and facilitate a better understanding of model capabilities, approaches, and lim
     - Hillslope Hydrology impacts on Biogeochemistry
 
 ## Additional resources
-
+- [Introduction to version control using Git](https://swcarpentry.github.io/git-novice/)
 
 ### Known issues:
 - ELM5 for Bayelva not working currently
