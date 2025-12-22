@@ -56,7 +56,7 @@ jobs:
 
 ### LONG TESTS
     long-era5-tests:
-      if: github.even_name == 'schedule'
+      if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
       runs-on: ubuntu-latest
       strategy:
         fail-fast: false
@@ -78,7 +78,7 @@ jobs:
             docker run --rm -v $(pwd):/home/modex_user -v inputdata:/mnt/inputdata -v output:/mnt/output yuanfornl/ngee-arctic-modex25:models-main-latest /home/modex_user/model_examples/ELM/run_ngeearctic_site.sh --site_name=${{matrix.site_name}} --met_source=era5 -tsp=1
         
     long-gswp3-tests:
-      if: github.event_name == 'schedule'
+      if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
       runs-on: ubuntu-latest
       strategy:
         fail-fast: false
