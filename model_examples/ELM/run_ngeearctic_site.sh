@@ -273,9 +273,9 @@ echo " "
   # - so use srcmods_era5cb for both  
 src_mod_path="/home/modex_user/tools/olmt/srcmods_modexws/"
 if [ ${met_source} = era5 ]; then
-  met_root="/mnt/inputdata/atm/datm7/era5"
+  met_root="/mnt/inputdata/E3SM/atm/datm7/era5"
 elif [ ${met_source} = gswp3 ]; then
-  met_root="/mnt/inputdata/atm/datm7/gswp3"
+  met_root="/mnt/inputdata/E3SM/atm/datm7/gswp3"
 fi
 
 if [ ${site_name} = beo ]; then
@@ -285,25 +285,25 @@ if [ ${site_name} = beo ]; then
   domain_file="domain.lnd.1x1pt_beo-GRID_navy.nc"
   met_path="${met_root}/utq"
 elif [ ${site_name} = council ]; then
-  site_code="AK-CLG"
+  site_code="AK-SP-CL71"
   surf_file="surfdata_1x1pt_council-GRID_simyr1850_c360x720_c171002.nc"
   landuse_file="landuse.timeseries_1x1pt_council-GRID_simyr1850-2015_c180423.nc"
   domain_file="domain.lnd.1x1pt_council-GRID_navy.nc"
   met_path="${met_root}/cnl"
 elif [ ${site_name} = kougarok ]; then
-  site_code="AK-K64G"
+  site_code="AK-SP-K64G"
   surf_file="surfdata_1x1pt_kougarok-GRID_simyr1850_c360x720_c171002.nc"
   landuse_file="landuse.timeseries_1x1pt_kougarok-GRID_simyr1850-2015_c180423.nc"
   domain_file="domain.lnd.1x1pt_kougarok-GRID_navy.nc"  
   met_path="${met_root}/kg"
 elif [ ${site_name} = teller ]; then
-  site_code="AK-TLG"
+  site_code="AK-SP-T27"
   surf_file="surfdata_1x1pt_teller-GRID_simyr1850_c360x720_c171002.nc"
   landuse_file="landuse.timeseries_1x1pt_teller-GRID_simyr1850-2015_c180423.nc"
   domain_file="domain.lnd.1x1pt_teller-GRID_navy.nc"
   met_path="${met_root}/tl"
 elif [ ${site_name} = toolik_lake ]; then
-  site_code="AK-Tlk"
+  site_code="AK-TFS"
   surf_file="surfdata_1x1pt_ToolikLake-GRID_simyr1850_c360x720_c250306.nc"
   landuse_file="landuse.timeseries_1x1pt_ToolikLake-GRID_simyr1850-2015_c250306.nc"
   domain_file="domain.lnd.1x1pt_ToolikLake-GRID.nc"
@@ -315,25 +315,25 @@ elif [ ${site_name} = trail_valley_creek ]; then
   domain_file="domain.lnd.1x1pt_TrailValleyCreek-GRID.nc"
   met_path="${met_root}/tvc"
 elif [ ${site_name} = abisko ]; then
-  site_code="SE-Abi"
+  site_code="SE-ASRS"
   surf_file="surfdata_1x1pt_Abisko-GRID_simyr1850_c360x720_c250306.nc"
   landuse_file="landuse.timeseries_1x1pt_Abisko-GRID_simyr1850-2015_c250306.nc"
   domain_file="domain.lnd.1x1pt_Abisko-GRID.nc"
   met_path="${met_root}/abs"
 elif [ ${site_name} = bayelva ]; then
-  site_code="NO-SJB"
+  site_code="NO-BS"
   surf_file="surfdata_1x1pt_SJ-BlvBayelva-GRID_simyr1850_c360x720_c250306.nc"
   landuse_file="landuse.timeseries_1x1pt_SJ-BlvBayelva-GRID_simyr1850-2015_c250306.nc"
   domain_file="domain.lnd.1x1pt_SJ-BlvBayelva-GRID.nc"
   met_path="${met_root}/bs"
 elif [ ${site_name} = samoylov_island ]; then
-  site_code="RU-Sam"
+  site_code="RU-SI"
   surf_file="surfdata_1x1pt_SamoylovIsland-GRID_simyr1850_c360x720_c250306.nc"
   landuse_file="landuse.timeseries_1x1pt_SamoylovIsland-GRID_simyr1850-2015_c250306.nc"
   domain_file="domain.lnd.1x1pt_SamoylovIsland-GRID.nc"
   met_path="${met_root}/si"
 elif [ ${site_name} = upper_kuparuk ]; then
-  site_code="AK-UPK"
+  site_code="AK-TFS-UPK"
   surf_file="surfdata_1x1pt_UpperKuparuk-GRID_simyr1850_c360x720_c250609.nc"
   landuse_file="landuse.timeseries_1x1pt_UpperKuparuk-GRID_simyr1850-2015_c250609.nc"
   domain_file="domain.lnd.1x1pt_UpperKuparuk-GRID.nc"
@@ -343,7 +343,7 @@ elif [ ${site_name} = upper_kuparuk ]; then
     met_path="${met_root}/tfs" # use same site data as toolik
   fi   
 elif [ ${site_name} = imnaviat_creek ]; then
-  site_code="AK-IMC"
+  site_code="AK-TFS-IMC"
   surf_file="surfdata_1x1pt_ImnaviatCreek-GRID_simyr1850_c360x720_c250609.nc"
   landuse_file="landuse.timeseries_1x1pt_ImnaviatCreek-GRID_simyr1850-2015_c250609.nc"
   domain_file="domain.lnd.1x1pt_ImnaviatCreek-GRID.nc"
@@ -384,14 +384,14 @@ runcmd="python3 ./site_fullrun.py \
       --cpl_bypass --${met_source} \
       --model_root /E3SM \
       --caseroot /mnt/output/cime_case_dirs \
-      --ccsm_input /mnt/inputdata \
+      --ccsm_input /mnt/inputdata/E3SM \
       --runroot /mnt/output/cime_run_dirs \
       --spinup_vars \
       --nopointdata \
       --metdir ${met_path} \
-      --domainfile /mnt/inputdata/share/domains/domain.clm/${domain_file} \
-      --surffile /mnt/inputdata/lnd/clm2/surfdata_map/${surf_file} \
-      --landusefile /mnt/inputdata/lnd/clm2/surfdata_map/${landuse_file} \
+      --domainfile /mnt/inputdata/E3SM/share/domains/domain.clm/${domain_file} \
+      --surffile /mnt/inputdata/E3SM/lnd/clm2/surfdata_map/${surf_file} \
+      --landusefile /mnt/inputdata/E3SM/lnd/clm2/surfdata_map/${landuse_file} \
       --srcmods_loc ${src_mod_path} /
       ${options} \
       & sleep 10"
@@ -407,21 +407,21 @@ mkdir -p /mnt/output/cime_case_dirs
 mkdir -p /mnt/output/cime_run_dirs
 
 # added met source, so known
-if /opt/conda/bin/python -u -X dev ./site_fullrun.py \
+if /opt/conda/bin/python ./site_fullrun.py \
       --site ${site_code} --sitegroup ${site_group} --caseidprefix ${case_prefix} \
       ${sim_years} --tstep ${timestep} --machine docker \
       --compiler gnu --mpilib openmpi \
       --cpl_bypass --${met_source} \
       --model_root ~/E3SM \
       --caseroot /mnt/output/cime_case_dirs \
-      --ccsm_input /mnt/inputdata \
+      --ccsm_input /mnt/inputdata/E3SM \
       --runroot /mnt/output/cime_run_dirs \
       --spinup_vars \
       --nopointdata \
       --metdir ${met_path} \
-      --domainfile /mnt/inputdata/share/domains/domain.clm/${domain_file} \
-      --surffile /mnt/inputdata/lnd/clm2/surfdata_map/${surf_file} \
-      --landusefile /mnt/inputdata/lnd/clm2/surfdata_map/${landuse_file} \
+      --domainfile /mnt/inputdata/E3SM/share/domains/domain.clm/${domain_file} \
+      --surffile /mnt/inputdata/E3SM/lnd/clm2/surfdata_map/${surf_file} \
+      --landusefile /mnt/inputdata/E3SM/lnd/clm2/surfdata_map/${landuse_file} \
       --srcmods_loc ${src_mod_path} \
       ${options} \
       & sleep 10
