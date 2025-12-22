@@ -15,7 +15,7 @@ jobs:
       strategy:
         fail-fast: false
         matrix:
-          site_name: [kougarok, teller, council, beo, toolik_lake, trail_valley_creek, abisko, samoylov_island]
+          site_name: [kougarok, teller, council, beo, toolik_lake, trail_valley_creek, abisko, samoylov_island, imnaviat_creek, upper_kuparuk]
       steps:
         - name: Checkout repo
           uses: actions/checkout@v6
@@ -37,7 +37,7 @@ jobs:
       strategy:
         fail-fast: false
         matrix:
-          site_name: [kougarok, teller, council, beo, toolik_lake, trail_valley_creek, abisko, bayelva, samoylov_island]
+          site_name: [kougarok, teller, council, beo, toolik_lake, trail_valley_creek, abisko, bayelva, samoylov_island, imnaviat_creek, upper_kuparuk]
       steps:
         - name: Checkout repo
           uses: actions/checkout@v6
