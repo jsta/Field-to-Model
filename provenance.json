@@ -53,7 +53,7 @@
     {
       "name": "_sources/modex_agenda_2025.rst.txt",
       "digest": {
-        "sha256": "11cda6d8e7a7adf97d06b3785b64faadb2e87526c71868b392c625ae49cc8667"
+        "sha256": "3ded59c4b2c50ed595de51ef22a2aea7aa9f07c8031b2a9b30ea8bfe06b076c0"
       }
     },
     {
@@ -65,7 +65,7 @@
     {
       "name": "_sources/setup.rst.txt",
       "digest": {
-        "sha256": "c33c96ace794f49aadd6697e9f2ee375b19422240d6de1dc1a34357380a834b7"
+        "sha256": "8fcd4527b8d6333757ad49ff5c05d9502cf0aa04ce8a665298a984a25c6c71d4"
       }
     },
     {
@@ -209,19 +209,19 @@
     {
       "name": "index.html",
       "digest": {
-        "sha256": "e1013b5e4e2eb6298cbc2d34a2bcec6416dacaaad033300b569f324d1b97e15d"
+        "sha256": "3c0f37732e2eb591440e08731c078be3e7ccf1e7ff0cb1ecc6f74b82a893ac9a"
       }
     },
     {
       "name": "modex_agenda_2025.html",
       "digest": {
-        "sha256": "c91d63b99830e81cb8549ae01bad4b299a19130520d4aebdfa24e464701f6be8"
+        "sha256": "30ddc2c181eb6bd37ed4bef7ade23c2e121104f35fa1388a0bf3d1bec9d512be"
       }
     },
     {
       "name": "objects.inv",
       "digest": {
-        "sha256": "400ca79f2695acfc1f10bceed6d60d4c3fb92c8e7bcb615cbff67a6ffba2dd50"
+        "sha256": "cada72ac921859a85af8c7c0fd9f7b12de2ee15739f781263944d380fb3dcbbe"
       }
     },
     {
@@ -239,13 +239,13 @@
     {
       "name": "searchindex.js",
       "digest": {
-        "sha256": "8bc7dc37eb5d833276d5ac3fcbf5b38eac900fbd62a8b02b8ea32142c3ee490d"
+        "sha256": "d9e02fbf1c01d12f72aab619082762e3a6fad0d747e517d4e62ee12ecb33cb58"
       }
     },
     {
       "name": "setup.html",
       "digest": {
-        "sha256": "6d04f5316ae815665d9fc45cc5da06e614d90c0c4c13d69f5c1b9d2a55aeb472"
+        "sha256": "dbab8e9776ea785aea5cdb3a368929030cd0aa6bf153f585227d1e21b757db7f"
       }
     },
     {
@@ -275,7 +275,7 @@
   ],
   "predicate": {
     "builder": {
-      "id": "https://github.com/jsta/Field-to-Model/actions/runs/20284211186/attempts/1"
+      "id": "https://github.com/jsta/Field-to-Model/actions/runs/20464872713/attempts/1"
     },
     "buildType": "https://mobyproject.org/buildkit@v1",
     "materials": [
@@ -306,27 +306,99 @@
         "github_actor_id": "7844578",
         "github_event_name": "push",
         "github_event_payload": {
-          "after": "a64d54dcda67161a5868e06a2d660c952d3d9a61",
+          "after": "9303030fae60b91c531b2131a77618a9bac2012f",
           "base_ref": null,
-          "before": "93c9cf465689fd6514a296726314e8b6ff3b59da",
+          "before": "a64d54dcda67161a5868e06a2d660c952d3d9a61",
           "commits": [
             {
               "author": {
-                "email": "jemma.stachelek@gmail.com",
-                "name": "Jemma Stachelek",
-                "username": "jsta"
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
               },
               "committer": {
-                "email": "jemma.stachelek@gmail.com",
-                "name": "Jemma Stachelek",
-                "username": "jsta"
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
               },
-              "distinct": false,
-              "id": "a5bd29906986deb64d381715899cc9f6f595c837",
-              "message": "use conda-forge",
-              "timestamp": "2025-12-16T14:35:51-07:00",
-              "tree_id": "a70db813ad797177eb7ce38ecb0228c2c6eafa5e",
-              "url": "https://github.com/jsta/Field-to-Model/commit/a5bd29906986deb64d381715899cc9f6f595c837"
+              "distinct": true,
+              "id": "0b515e6d13f129588cef9734f9da4b973d4830dd",
+              "message": "move E3SM pointer",
+              "timestamp": "2025-12-17T12:06:00-07:00",
+              "tree_id": "0335421ead77094f76dd1dd14f0da5728a3fe78c",
+              "url": "https://github.com/jsta/Field-to-Model/commit/0b515e6d13f129588cef9734f9da4b973d4830dd"
+            },
+            {
+              "author": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "committer": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "distinct": true,
+              "id": "a22d08870e9bf62a4a0cc1460b919e9ea557e75e",
+              "message": "update ELM runscript to try to fix CI",
+              "timestamp": "2025-12-17T12:08:26-07:00",
+              "tree_id": "f3309ef52716e996491470956e861b064249ba7b",
+              "url": "https://github.com/jsta/Field-to-Model/commit/a22d08870e9bf62a4a0cc1460b919e9ea557e75e"
+            },
+            {
+              "author": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "committer": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "distinct": true,
+              "id": "e07dc5fa9a968c2754a559add7e980d735c2b37b",
+              "message": "advance olmt pointer again",
+              "timestamp": "2025-12-17T13:13:41-07:00",
+              "tree_id": "42ddc6813baf6245d9b25a7a00625e75b9322026",
+              "url": "https://github.com/jsta/Field-to-Model/commit/e07dc5fa9a968c2754a559add7e980d735c2b37b"
+            },
+            {
+              "author": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "committer": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "distinct": true,
+              "id": "e3573668acf5305007c3c99b147a46c7c62e197d",
+              "message": "advance E3SM pointer",
+              "timestamp": "2025-12-17T13:14:22-07:00",
+              "tree_id": "19972ab2dfe6fc5097cf071de5d87da461705f1c",
+              "url": "https://github.com/jsta/Field-to-Model/commit/e3573668acf5305007c3c99b147a46c7c62e197d"
+            },
+            {
+              "author": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "committer": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "distinct": true,
+              "id": "f7ecbe6684109a628719325a02f46dbeb87dd0a0",
+              "message": "fix dates in agenda doc",
+              "timestamp": "2025-12-17T13:25:09-07:00",
+              "tree_id": "2553a960cb2f7759de9565f2ce02d1bbde943825",
+              "url": "https://github.com/jsta/Field-to-Model/commit/f7ecbe6684109a628719325a02f46dbeb87dd0a0"
             },
             {
               "author": {
@@ -340,11 +412,29 @@
                 "username": "web-flow"
               },
               "distinct": true,
-              "id": "c2f7516c6b1ba96e1194753fe6fc40a2b5316921",
-              "message": "Merge pull request #45 from jsta/vis-ci\n\nuse conda-forge for first conda install in viz container",
-              "timestamp": "2025-12-16T14:57:25-07:00",
-              "tree_id": "a70db813ad797177eb7ce38ecb0228c2c6eafa5e",
-              "url": "https://github.com/jsta/Field-to-Model/commit/c2f7516c6b1ba96e1194753fe6fc40a2b5316921"
+              "id": "a89aebb44cddcf84bb04f8d0252dbc9601f88b02",
+              "message": "Merge pull request #48 from NGEE-Arctic/rich/enable-more-elm-capability\n\nTurn on more ELM capability in run script",
+              "timestamp": "2025-12-17T13:40:50-07:00",
+              "tree_id": "19972ab2dfe6fc5097cf071de5d87da461705f1c",
+              "url": "https://github.com/jsta/Field-to-Model/commit/a89aebb44cddcf84bb04f8d0252dbc9601f88b02"
+            },
+            {
+              "author": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "committer": {
+                "email": "noreply@github.com",
+                "name": "GitHub",
+                "username": "web-flow"
+              },
+              "distinct": true,
+              "id": "4a88940c82b98b333b54d60a955e0f3b20809e87",
+              "message": "Merge pull request #47 from NGEE-Arctic/rich/documentation-updates\n\nadd docker install instructions",
+              "timestamp": "2025-12-17T13:47:23-07:00",
+              "tree_id": "59f70b1d2ecdb3a9d40acfbe296ec3658f1091fd",
+              "url": "https://github.com/jsta/Field-to-Model/commit/4a88940c82b98b333b54d60a955e0f3b20809e87"
             },
             {
               "author": {
@@ -358,14 +448,230 @@
                 "username": "rfiorella"
               },
               "distinct": true,
-              "id": "a64d54dcda67161a5868e06a2d660c952d3d9a61",
-              "message": "update file names in index",
-              "timestamp": "2025-12-16T15:00:34-07:00",
-              "tree_id": "b32d73144bcfab06d7525673884f56398db296c3",
-              "url": "https://github.com/jsta/Field-to-Model/commit/a64d54dcda67161a5868e06a2d660c952d3d9a61"
+              "id": "047374ba94a65d0a06334ccfa4e4dd0149391385",
+              "message": "update container OLMT version",
+              "timestamp": "2025-12-17T17:03:35-07:00",
+              "tree_id": "11968802d42d56809644dc52c07331a0e291ffc1",
+              "url": "https://github.com/jsta/Field-to-Model/commit/047374ba94a65d0a06334ccfa4e4dd0149391385"
+            },
+            {
+              "author": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "committer": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "distinct": true,
+              "id": "c0e6d6b3d4f348feefaa41fcc4b5d01a3888c77c",
+              "message": "WIP - migrate site names to common site names",
+              "timestamp": "2025-12-22T11:00:45-07:00",
+              "tree_id": "67ddf948559472ce6ee709d1fb2c62bcb80662a0",
+              "url": "https://github.com/jsta/Field-to-Model/commit/c0e6d6b3d4f348feefaa41fcc4b5d01a3888c77c"
+            },
+            {
+              "author": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "committer": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "distinct": true,
+              "id": "24e16088ce60342f971d13a06b5fb09571afb44e",
+              "message": "update readme",
+              "timestamp": "2025-12-22T11:11:30-07:00",
+              "tree_id": "1dba47f239f6584ca436246411cf5bc0e5f459f9",
+              "url": "https://github.com/jsta/Field-to-Model/commit/24e16088ce60342f971d13a06b5fb09571afb44e"
+            },
+            {
+              "author": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "committer": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "distinct": true,
+              "id": "b53acb6825a633d2fa850fcf41b95a8178f0e6ed",
+              "message": "add TFS subsites to quick test matrix",
+              "timestamp": "2025-12-22T11:13:35-07:00",
+              "tree_id": "db9f3bcb330fd188dbee0b4cae2cb725b07e1f40",
+              "url": "https://github.com/jsta/Field-to-Model/commit/b53acb6825a633d2fa850fcf41b95a8178f0e6ed"
+            },
+            {
+              "author": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "committer": {
+                "email": "noreply@github.com",
+                "name": "GitHub",
+                "username": "web-flow"
+              },
+              "distinct": true,
+              "id": "9add0847814f5aeba2d09ee3be1162b9eceb74de",
+              "message": "Fix image tag formatting in README.md",
+              "timestamp": "2025-12-22T11:29:08-07:00",
+              "tree_id": "e9e101cc8b694248e803d2aea98606b8e747ca9b",
+              "url": "https://github.com/jsta/Field-to-Model/commit/9add0847814f5aeba2d09ee3be1162b9eceb74de"
+            },
+            {
+              "author": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "committer": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "distinct": true,
+              "id": "b6a9940479e999d4fdb7737215cff23d74adefbb",
+              "message": "fix a few typos for ELM CI",
+              "timestamp": "2025-12-22T12:22:54-07:00",
+              "tree_id": "c88cb1f3c04183b0fcf6e50cf697a80973a251ef",
+              "url": "https://github.com/jsta/Field-to-Model/commit/b6a9940479e999d4fdb7737215cff23d74adefbb"
+            },
+            {
+              "author": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "committer": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "distinct": true,
+              "id": "5cc88f5557aff9c4af243cf209e895d91a7ac3a4",
+              "message": "allow manual trigger of elm tests",
+              "timestamp": "2025-12-22T12:38:06-07:00",
+              "tree_id": "f2be0615a39764e84b4522e0df9c7de53e513950",
+              "url": "https://github.com/jsta/Field-to-Model/commit/5cc88f5557aff9c4af243cf209e895d91a7ac3a4"
+            },
+            {
+              "author": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "committer": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "distinct": true,
+              "id": "2c5baef44ee6060e36a7b712ace2fbeb84651c2b",
+              "message": "start resources section",
+              "timestamp": "2025-12-22T12:38:06-07:00",
+              "tree_id": "3d5db3cc6070b0203e8bbc175346f4d3e2dbc9ae",
+              "url": "https://github.com/jsta/Field-to-Model/commit/2c5baef44ee6060e36a7b712ace2fbeb84651c2b"
+            },
+            {
+              "author": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "committer": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "distinct": true,
+              "id": "e43def8f996d83c495805173618faddcd77bec5d",
+              "message": "add trigger for long runs",
+              "timestamp": "2025-12-22T12:54:00-07:00",
+              "tree_id": "891daee2d42fc97e17478163683d48a4e4450f6f",
+              "url": "https://github.com/jsta/Field-to-Model/commit/e43def8f996d83c495805173618faddcd77bec5d"
+            },
+            {
+              "author": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "committer": {
+                "email": "noreply@github.com",
+                "name": "GitHub",
+                "username": "web-flow"
+              },
+              "distinct": true,
+              "id": "34b7cde366e15fa4133c062f24d2c55d4b733bc6",
+              "message": "Merge pull request #49 from NGEE-Arctic/ci-longrun-debug\n\n[WIP - will be another PR later] Debug errors in long-run CI for ELM",
+              "timestamp": "2025-12-22T12:59:49-07:00",
+              "tree_id": "891daee2d42fc97e17478163683d48a4e4450f6f",
+              "url": "https://github.com/jsta/Field-to-Model/commit/34b7cde366e15fa4133c062f24d2c55d4b733bc6"
+            },
+            {
+              "author": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "committer": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "distinct": true,
+              "id": "b58baa9afbf0c21666cbf7094e22d20b11b1150a",
+              "message": "add tem tests to CI",
+              "timestamp": "2025-12-22T14:40:40-07:00",
+              "tree_id": "622896e2de61564ae77183438cd7ec7f1b02570e",
+              "url": "https://github.com/jsta/Field-to-Model/commit/b58baa9afbf0c21666cbf7094e22d20b11b1150a"
+            },
+            {
+              "author": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "committer": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "distinct": true,
+              "id": "c592d2169220f3cee0264ab579d36ddbf16c1a22",
+              "message": "update README.md",
+              "timestamp": "2025-12-22T15:43:26-07:00",
+              "tree_id": "c56a04ad0975e11b5c3e66249f6a05521dd8b2da",
+              "url": "https://github.com/jsta/Field-to-Model/commit/c592d2169220f3cee0264ab579d36ddbf16c1a22"
+            },
+            {
+              "author": {
+                "email": "rfiorella@lanl.gov",
+                "name": "Rich Fiorella",
+                "username": "rfiorella"
+              },
+              "committer": {
+                "email": "noreply@github.com",
+                "name": "GitHub",
+                "username": "web-flow"
+              },
+              "distinct": true,
+              "id": "9303030fae60b91c531b2131a77618a9bac2012f",
+              "message": "Merge pull request #50 from NGEE-Arctic/add-tem-ci",
+              "timestamp": "2025-12-22T22:53:11-07:00",
+              "tree_id": "fdeec93d7b5f2f49f5e24f746894e7242a673ff3",
+              "url": "https://github.com/jsta/Field-to-Model/commit/9303030fae60b91c531b2131a77618a9bac2012f"
             }
           ],
-          "compare": "https://github.com/jsta/Field-to-Model/compare/93c9cf465689...a64d54dcda67",
+          "compare": "https://github.com/jsta/Field-to-Model/compare/a64d54dcda67...9303030fae60",
           "created": false,
           "deleted": false,
           "forced": false,
@@ -376,16 +682,16 @@
               "username": "rfiorella"
             },
             "committer": {
-              "email": "rfiorella@lanl.gov",
-              "name": "Rich Fiorella",
-              "username": "rfiorella"
+              "email": "noreply@github.com",
+              "name": "GitHub",
+              "username": "web-flow"
             },
             "distinct": true,
-            "id": "a64d54dcda67161a5868e06a2d660c952d3d9a61",
-            "message": "update file names in index",
-            "timestamp": "2025-12-16T15:00:34-07:00",
-            "tree_id": "b32d73144bcfab06d7525673884f56398db296c3",
-            "url": "https://github.com/jsta/Field-to-Model/commit/a64d54dcda67161a5868e06a2d660c952d3d9a61"
+            "id": "9303030fae60b91c531b2131a77618a9bac2012f",
+            "message": "Merge pull request #50 from NGEE-Arctic/add-tem-ci",
+            "timestamp": "2025-12-22T22:53:11-07:00",
+            "tree_id": "fdeec93d7b5f2f49f5e24f746894e7242a673ff3",
+            "url": "https://github.com/jsta/Field-to-Model/commit/9303030fae60b91c531b2131a77618a9bac2012f"
           },
           "pusher": {
             "email": "jsta@users.noreply.github.com",
@@ -475,9 +781,9 @@
             },
             "private": false,
             "pulls_url": "https://api.github.com/repos/jsta/Field-to-Model/pulls{/number}",
-            "pushed_at": 1765922738,
+            "pushed_at": 1766503987,
             "releases_url": "https://api.github.com/repos/jsta/Field-to-Model/releases{/id}",
-            "size": 285,
+            "size": 37508,
             "ssh_url": "git@github.com:jsta/Field-to-Model.git",
             "stargazers": 0,
             "stargazers_count": 0,
@@ -490,7 +796,7 @@
             "teams_url": "https://api.github.com/repos/jsta/Field-to-Model/teams",
             "topics": [],
             "trees_url": "https://api.github.com/repos/jsta/Field-to-Model/git/trees{/sha}",
-            "updated_at": "2025-12-16T21:11:34Z",
+            "updated_at": "2025-12-16T22:05:42Z",
             "url": "https://api.github.com/repos/jsta/Field-to-Model",
             "visibility": "public",
             "watchers": 0,
@@ -529,20 +835,20 @@
         "github_repository_owner": "jsta",
         "github_repository_owner_id": "7844578",
         "github_run_attempt": "1",
-        "github_run_id": "20284211186",
-        "github_run_number": "20",
+        "github_run_id": "20464872713",
+        "github_run_number": "26",
         "github_runner_arch": "X64",
         "github_runner_environment": "github-hosted",
         "github_runner_image_os": "ubuntu24",
-        "github_runner_image_version": "20251208.163.1",
-        "github_runner_name": "GitHub Actions 1000001481",
+        "github_runner_image_version": "20251215.174.1",
+        "github_runner_name": "GitHub Actions 1000001584",
         "github_runner_os": "Linux",
-        "github_runner_tracking_id": "github_433818bc-5105-4a9c-a7ed-ccb6a63882eb",
+        "github_runner_tracking_id": "github_b125c599-6876-4472-ad06-70b47894586b",
         "github_server_url": "https://github.com",
         "github_triggering_actor": "jsta",
         "github_workflow": "Sphinx: Render docs",
         "github_workflow_ref": "jsta/Field-to-Model/.github/workflows/docs.yml@refs/heads/main",
-        "github_workflow_sha": "a64d54dcda67161a5868e06a2d660c952d3d9a61",
+        "github_workflow_sha": "9303030fae60b91c531b2131a77618a9bac2012f",
         "platform": "linux/amd64"
       }
     },
@@ -792,21 +1098,21 @@
         }
       ],
       "digestMapping": {
-        "sha256:317ea5e3ab82525c242ba61c14ac2777b3009681af0dcadd7805dc610f4aafb5": "step5",
-        "sha256:351640851a6c3569ea665052206a7624d245181a7511a9e9561b7f0b84cef51e": "step4",
+        "sha256:447c439108fac1ca467c411056c7db26b97cccb45559dd8d10288c8cfe7fa391": "step2",
         "sha256:495dde8bb048f85f9e257b18e77c7e688416cf924929b77b94e0a7f41b788de0": "step0",
-        "sha256:4fb272d01c21b1082a18dae3bce785fb44572b71b195504dd7925e69cf6d7f66": "step3",
-        "sha256:6b11a9b088a083c40d464dd72a52865566149c4e16760a955659002bcd822be9": "step2",
-        "sha256:c25eeb47828a709fa491ac8c20da0f0154ac998b63a56d5ec63374fa22d35d87": "step6",
-        "sha256:d07c9d565d1b332efced63f41f6ba5aa734805e607001e075e61e2f2bd151644": "step1",
-        "sha256:d0c64b32249db9214ce24bd670ed5958cdcba2eb10f025510c44485385f464cb": "step8",
-        "sha256:da73eb58375bb88ddcac4a3b92b8aac3aba7f22824309f4c917d18f3b30c8beb": "step7"
+        "sha256:59e3baaff75c3731b8c2faa817b1a502bfc3567d2174b1ab215c86be7b2c87a6": "step4",
+        "sha256:5c0957fbba784178d3e79d3c37636a28783b2d668004894e81f0ffb549565037": "step8",
+        "sha256:928fa2a848dc8bd362afb7ee26c6495bb85e4178a0c8acf4439a0886da548204": "step3",
+        "sha256:b8d2887c4c1eaae4bb9db63193c2fa4430fd04a9a5ae413aac6ebf55270d24a1": "step6",
+        "sha256:d35f29dfc3644bd03ad681fe2273782d473107c7e2e166e032f3eed254db57f1": "step7",
+        "sha256:ed66c6514a694781abd2c9879f88173854d632a5bb968d12f90023bb4adaceec": "step5",
+        "sha256:edddedbf3a8b5ab023dc1fc03e57a5da56c5a2ef8daec94752279580630a385b": "step1"
       }
     },
     "metadata": {
-      "buildInvocationID": "vu7vki6owdg9xwn793xtg0e06",
-      "buildStartedOn": "2025-12-16T22:05:55.583978695Z",
-      "buildFinishedOn": "2025-12-16T22:06:06.945291173Z",
+      "buildInvocationID": "83zcauvasfykf7a6v9c617yug",
+      "buildStartedOn": "2025-12-23T15:33:22.940827701Z",
+      "buildFinishedOn": "2025-12-23T15:33:35.497109566Z",
       "completeness": {
         "parameters": true,
         "environment": true,
@@ -817,7 +1123,7 @@
         "vcs": {
           "localdir:context": ".",
           "localdir:dockerfile": "Docker",
-          "revision": "a64d54dcda67161a5868e06a2d660c952d3d9a61",
+          "revision": "9303030fae60b91c531b2131a77618a9bac2012f",
           "source": "https://github.com/jsta/Field-to-Model"
         },
         "source": {
@@ -969,8 +1275,8 @@
                 }
               ],
               "digestMapping": {
-                "sha256:e0e54da0913a473dd917c681bad50461305e4d20565db82a7b2d7efa412cb9af": "step0",
-                "sha256:f1570c3831e33afce0ed6337d5699de216f9ab3fc71371c979816c8c6eb39e86": "step1"
+                "sha256:6525da36b5d3c7a4f608479ef8889fd74cfbecbcb07b065ad9959dafb13f44f7": "step1",
+                "sha256:f8e30971b88bda1bcf583578c35f70645649aee120fcc3c5f7a65ca6332adfb2": "step0"
               }
             }
           ]
